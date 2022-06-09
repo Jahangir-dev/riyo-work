@@ -253,7 +253,7 @@ const [menu, setMenu] = useState(false)
             <div className="col-md-6 d-flex">
               <div className="card card-table flex-fill">
                 <div className="card-header">
-                  <h3 className="card-title mb-0">Who's On Now <span class="badge badge-pill bg-success">16</span></h3>
+                  <h3 className="card-title mb-0">Who's On Now <span className="badge badge-pill bg-success">16</span></h3>
                 </div>
                 <div className="card-body">
                   <div className="table-responsive">
@@ -288,7 +288,7 @@ const [menu, setMenu] = useState(false)
                             </div> */}
                           </td>
                           <td className="">
-                          <span class="badge bg-inverse-warning">Rd Museum</span>
+                          <span className="badge bg-inverse-warning">Rd Museum</span>
                             {/* <div className="dropdown dropdown-action">
                               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                               <div className="dropdown-menu dropdown-menu-right">
@@ -319,7 +319,7 @@ const [menu, setMenu] = useState(false)
                             </div> */}
                           </td>
                           <td className="">
-                          <span class="badge bg-success">Madame tussauds</span>
+                          <span className="badge bg-success">Madame tussauds</span>
                             {/* <div className="dropdown dropdown-action">
                               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                               <div className="dropdown-menu dropdown-menu-right">
@@ -349,7 +349,7 @@ const [menu, setMenu] = useState(false)
                             </div> */}
                           </td>
                           <td className="">
-                          <span class="badge bg-info">White House</span>
+                          <span className="badge bg-info">White House</span>
                             {/* <div className="dropdown dropdown-action">
                               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                               <div className="dropdown-menu dropdown-menu-right">
@@ -379,7 +379,7 @@ const [menu, setMenu] = useState(false)
                             </div> */}
                           </td>
                           <td className="">
-                          <span class="badge bg-inverse-warning">Rd Museum</span>
+                          <span className="badge bg-inverse-warning">Rd Museum</span>
                             {/* <div className="dropdown dropdown-action">
                               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                               <div className="dropdown-menu dropdown-menu-right">
@@ -409,7 +409,7 @@ const [menu, setMenu] = useState(false)
                             </div> */}
                           </td>
                           <td className="">
-                          <span class="badge bg-success">Madame tussauds</span>
+                          <span className="badge bg-success">Madame tussauds</span>
                             {/* <div className="dropdown dropdown-action">
                               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                               <div className="dropdown-menu dropdown-menu-right">
@@ -447,9 +447,9 @@ const [menu, setMenu] = useState(false)
                         <tr>
                         <td>
                           <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
-                          <small class="block text-ellipsis">
-                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
-                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          <small className="block text-ellipsis">
+                          <span className="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span className="text-muted">Guards Assigned :</span> <span>9</span> 
                           </small>
                         </td>
                           <td>23-August-2021
@@ -470,9 +470,9 @@ const [menu, setMenu] = useState(false)
                         <tr>
                         <td>
                           <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
-                          <small class="block text-ellipsis">
-                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
-                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          <small className="block text-ellipsis">
+                          <span className="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span className="text-muted">Guards Assigned :</span> <span>9</span> 
                           </small>
                         </td>
                           <td>23-August-2021
@@ -493,9 +493,9 @@ const [menu, setMenu] = useState(false)
                         <tr>
                         <td>
                           <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
-                          <small class="block text-ellipsis">
-                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
-                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          <small className="block text-ellipsis">
+                          <span className="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span className="text-muted">Guards Assigned :</span> <span>9</span> 
                           </small>
                         </td>
                           <td>23-August-2021
@@ -516,9 +516,9 @@ const [menu, setMenu] = useState(false)
                         <tr>
                         <td>
                           <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
-                          <small class="block text-ellipsis">
-                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
-                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          <small className="block text-ellipsis">
+                          <span className="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span className="text-muted">Guards Assigned :</span> <span>9</span> 
                           </small>
                         </td>
                           <td>23-August-2021
@@ -539,9 +539,9 @@ const [menu, setMenu] = useState(false)
                         <tr>
                         <td>
                           <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
-                          <small class="block text-ellipsis">
-                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
-                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          <small className="block text-ellipsis">
+                          <span className="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span className="text-muted">Guards Assigned :</span> <span>9</span> 
                           </small>
                         </td>
                           <td>23-August-2021
@@ -627,7 +627,7 @@ const [menu, setMenu] = useState(false)
                         <span className="text-sm text-muted">Timings : 16:30 - 21:00</span>
                       </div>
                       <div className="col-6 text-end">
-                      <span class="badge bg-danger text-white">30 min late</span>
+                      <span className="badge bg-danger text-white">30 min late</span>
                       </div>
                     </div>
                   </div>
@@ -644,7 +644,7 @@ const [menu, setMenu] = useState(false)
                         <span className="text-sm text-muted">Timings : 16:30 - 21:00</span>
                       </div>
                       <div className="col-6 text-end">
-                      <span class="badge bg-danger text-white">30 min late</span>
+                      <span className="badge bg-danger text-white">30 min late</span>
                       </div>
                     </div>
                   </div>
