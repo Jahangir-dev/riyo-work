@@ -55,13 +55,14 @@ const [menu, setMenu] = useState(false)
  });
 
       return (
+        
         <div className={`main-wrapper ${menu ? 'slide-nav': ''}`}> 
           
               <Header onMenuClick={(value) => toggleMobileMenu()} />
               <Sidebar /> 
          <div className="page-wrapper">
              <Helmet>
-                    <title>Dashboard - HRMS Admin Template</title>
+                    <title>Dashboard - Riyo Work</title>
                     <meta name="description" content="Dashboard"/>					
             </Helmet>
         {/* Page Content */}
@@ -85,7 +86,7 @@ const [menu, setMenu] = useState(false)
                   <span className="dash-widget-icon"><i className="fa fa-cubes" /></span>
                   <div className="dash-widget-info">
                     <h3>112</h3>
-                    <span>Projects</span>
+                    <span>Locations</span>
                   </div>
                 </div>
               </div>
@@ -104,10 +105,10 @@ const [menu, setMenu] = useState(false)
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
               <div className="card dash-widget">
                 <div className="card-body">
-                  <span className="dash-widget-icon"><i className="fa fa-diamond" /></span>
+                  <span className="dash-widget-icon"><i className="fa fa-user" /></span>
                   <div className="dash-widget-info">
-                    <h3>37</h3>
-                    <span>Tasks</span>
+                    <h3>218</h3>
+                    <span>Staff</span>
                   </div>
                 </div>
               </div>
@@ -115,23 +116,22 @@ const [menu, setMenu] = useState(false)
             <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
               <div className="card dash-widget">
                 <div className="card-body">
-                  <span className="dash-widget-icon"><i className="fa fa-user" /></span>
+                  <span className="dash-widget-icon"><i className="fa fa-clock-o" /></span>
                   <div className="dash-widget-info">
-                    <h3>218</h3>
-                    <span>Employees</span>
+                    <h3>Time-In</h3>
+                    <span>Aug 21, 2021 - 07:45</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="row">
+          {/* <div className="row">
             <div className="col-md-12">
               <div className="row">
                 <div className="col-md-6 text-center">
                   <div className="card">
                     <div className="card-body">
                       <h3 className="card-title">Total Revenue</h3>
-                      {/* <div id="bar-charts" /> */}
                       <ResponsiveContainer width='100%' height={300}>
                       <BarChart
                          
@@ -169,8 +169,6 @@ const [menu, setMenu] = useState(false)
                         <Line type="monotone" dataKey="Total Revenue" stroke="#0253cc" fill="#0253cc" strokeWidth={3} dot={{r : 3}} activeDot={{ r: 7 }} />
                       </LineChart>
                       </ResponsiveContainer>
-                      
-                      {/* <div id="line-charts" /> */}
                     </div>
                   </div>
                 </div>
@@ -250,6 +248,326 @@ const [menu, setMenu] = useState(false)
                 </div>
               </div>
             </div>	
+          </div> */}
+            <div className="row">
+            <div className="col-md-6 d-flex">
+              <div className="card card-table flex-fill">
+                <div className="card-header">
+                  <h3 className="card-title mb-0">Who's On Now <span class="badge badge-pill bg-success">16</span></h3>
+                </div>
+                <div className="card-body">
+                  <div className="table-responsive">
+                    <table className="table custom-table mb-0">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Time-In</th>
+                          <th>Shift Timing</th>
+                          <th className="">Locations</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <h2 className="table-avatar">
+                              <a href="#" className="avatar"><img alt="" src={Avatar_19} /></a>
+                              <Link to = "/app/profile/client-profile">Barry Cuda <span>CEO</span></Link>
+                            </h2>
+                          </td>
+                          <td>16:43</td>
+                          <td>
+                          16:30 - 21:00
+                            {/* <div className="dropdown action-label">
+                              <a className="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i className="fa fa-dot-circle-o text-success" /> Active
+                              </a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-success" /> Active</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger" /> Inactive</a>
+                              </div>
+                            </div> */}
+                          </td>
+                          <td className="">
+                          <span class="badge bg-inverse-warning">Rd Museum</span>
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <h2 className="table-avatar">
+                              <a href="#" className="avatar"><img alt="" src={Avatar_19} /></a>
+                              <Link to = "/app/profile/client-profile">Tressa Wexler <span>Manager</span></Link>
+                            </h2>
+                          </td>
+                          <td>16:43</td>
+                          <td>
+                            16:30 - 21:00
+                            {/* <div className="dropdown action-label">
+                              <a className="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i className="fa fa-dot-circle-o text-danger" /> Inactive
+                              </a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-success" /> Active</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger" /> Inactive</a>
+                              </div>
+                            </div> */}
+                          </td>
+                          <td className="">
+                          <span class="badge bg-success">Madame tussauds</span>
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <h2 className="table-avatar">
+                              <Link to = "/app/profile/client-profile" className="avatar"><img alt="" src={Avatar_07} /></Link>
+                              <Link to = "/app/profile/client-profile">Ruby Bartlett <span>CEO</span></Link>
+                            </h2>
+                          </td>
+                          <td>16:43</td>
+                          <td>16:30 - 21:00
+                            {/* <div className="dropdown action-label">
+                              <a className="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i className="fa fa-dot-circle-o text-danger" /> Inactive
+                              </a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-success" /> Active</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger" /> Inactive</a>
+                              </div>
+                            </div> */}
+                          </td>
+                          <td className="">
+                          <span class="badge bg-info">White House</span>
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <h2 className="table-avatar">
+                              <Link to = "/app/profile/client-profile" className="avatar"><img alt="" src={Avatar_06} /></Link>
+                              <Link to = "/app/profile/client-profile"> Misty Tison <span>CEO</span></Link>
+                            </h2>
+                          </td>
+                          <td>16:43</td>
+                          <td>16:30 - 21:00
+                            {/* <div className="dropdown action-label">
+                              <a className="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i className="fa fa-dot-circle-o text-success" /> Active
+                              </a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-success" /> Active</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger" /> Inactive</a>
+                              </div>
+                            </div> */}
+                          </td>
+                          <td className="">
+                          <span class="badge bg-inverse-warning">Rd Museum</span>
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <h2 className="table-avatar">
+                              <Link to = "/app/profile/client-profile" className="avatar"><img alt="" src={Avatar_14} /></Link>
+                              <Link to = "/app/profile/client-profile"> Daniel Deacon <span>CEO</span></Link>
+                            </h2>
+                          </td>
+                          <td>16:43</td>
+                          <td>16:30 - 21:00
+                            {/* <div className="dropdown action-label">
+                              <a className="btn btn-white btn-sm btn-rounded dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i className="fa fa-dot-circle-o text-danger" /> Inactive
+                              </a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-success" /> Active</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger" /> Inactive</a>
+                              </div>
+                            </div> */}
+                          </td>
+                          <td className="">
+                          <span class="badge bg-success">Madame tussauds</span>
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="card-footer">
+                  <Link to = "/app/employees/clients">View all Active Employees</Link>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 d-flex">
+              <div className="card card-table flex-fill">
+                <div className="card-header">
+                  <h3 className="card-title mb-0">Upcoming Shifts</h3>
+                </div>
+                <div className="card-body">
+                  <div className="table-responsive">
+                    <table className="table custom-table mb-0">
+                      <thead>
+                        <tr>
+                          <th>Locations  </th>
+                          <th>Start Date</th>
+                          <th className="">Work Duration</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                        <td>
+                          <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
+                          <small class="block text-ellipsis">
+                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          </small>
+                        </td>
+                          <td>23-August-2021
+                            {/* <div className="progress progress-xs progress-striped">
+                              <div className="progress-bar" role="progressbar" data-bs-toggle="tooltip" title="65%" style={{width: '65%'}} />
+                            </div> */}
+                          </td>
+                          <td className=""> 4 weeks
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>
+                          <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
+                          <small class="block text-ellipsis">
+                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          </small>
+                        </td>
+                          <td>23-August-2021
+                            {/* <div className="progress progress-xs progress-striped">
+                              <div className="progress-bar" role="progressbar" data-bs-toggle="tooltip" title="65%" style={{width: '65%'}} />
+                            </div> */}
+                          </td>
+                          <td className=""> 4 weeks
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>
+                          <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
+                          <small class="block text-ellipsis">
+                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          </small>
+                        </td>
+                          <td>23-August-2021
+                            {/* <div className="progress progress-xs progress-striped">
+                              <div className="progress-bar" role="progressbar" data-bs-toggle="tooltip" title="65%" style={{width: '65%'}} />
+                            </div> */}
+                          </td>
+                          <td className=""> 4 weeks
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>
+                          <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
+                          <small class="block text-ellipsis">
+                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          </small>
+                        </td>
+                          <td>23-August-2021
+                            {/* <div className="progress progress-xs progress-striped">
+                              <div className="progress-bar" role="progressbar" data-bs-toggle="tooltip" title="65%" style={{width: '65%'}} />
+                            </div> */}
+                          </td>
+                          <td className=""> 4 weeks
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                        <tr>
+                        <td>
+                          <h2><a href="/app/projects/projects-view">Madame tussauds</a></h2>
+                          <small class="block text-ellipsis">
+                          <span class="text-muted">Timings :</span> <span>16:30 - 21:00</span>,
+                          <span class="text-muted">Guards Assigned :</span> <span>9</span> 
+                          </small>
+                        </td>
+                          <td>23-August-2021
+                            {/* <div className="progress progress-xs progress-striped">
+                              <div className="progress-bar" role="progressbar" data-bs-toggle="tooltip" title="65%" style={{width: '65%'}} />
+                            </div> */}
+                          </td>
+                          <td className=""> 4 weeks
+                            {/* <div className="dropdown dropdown-action">
+                              <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                              <div className="dropdown-menu dropdown-menu-right">
+                                <a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                <a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                              </div>
+                            </div> */}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="card-footer">
+                  <Link to = "/app/projects/project_dashboard">View all Locations</Link>
+                </div>
+              </div>
+            </div>
           </div>
           {/* Statistics Widget */}
           <div className="row">
@@ -265,21 +583,21 @@ const [menu, setMenu] = useState(false)
                       </div>
                     </div>
                     <div className="stats-info">
-                      <p>Pending Invoice <strong>15 <small>/ 92</small></strong></p>
+                      <p>Locations Active <strong>15 <small>/ 20</small></strong></p>
                       <div className="progress">
-                        <div className="progress-bar bg-warning" role="progressbar" style={{width: '31%'}} aria-valuenow={31} aria-valuemin={0} aria-valuemax={100} />
+                        <div className="progress-bar bg-warning" role="progressbar" style={{width: '70%'}} aria-valuenow={70} aria-valuemin={0} aria-valuemax={100} />
                       </div>
                     </div>
                     <div className="stats-info">
-                      <p>Completed Projects <strong>85 <small>/ 112</small></strong></p>
+                      <p>Employees Active <strong>105 <small>/ 112</small></strong></p>
                       <div className="progress">
-                        <div className="progress-bar bg-success" role="progressbar" style={{width: '62%'}} aria-valuenow={62} aria-valuemin={0} aria-valuemax={100} />
+                        <div className="progress-bar bg-success" role="progressbar" style={{width: '92%'}} aria-valuenow={92} aria-valuemin={0} aria-valuemax={100} />
                       </div>
                     </div>
                     <div className="stats-info">
-                      <p>Open Tickets <strong>190 <small>/ 212</small></strong></p>
+                      <p>Todays late <strong>5 <small>/ 100</small></strong></p>
                       <div className="progress">
-                        <div className="progress-bar bg-danger" role="progressbar" style={{width: '62%'}} aria-valuenow={62} aria-valuemin={0} aria-valuemax={100} />
+                        <div className="progress-bar bg-danger" role="progressbar" style={{width: '5%'}} aria-valuenow={5} aria-valuemin={0} aria-valuemax={100} />
                       </div>
                     </div>
                     <div className="stats-info">
@@ -294,37 +612,44 @@ const [menu, setMenu] = useState(false)
             </div>
             <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
               <div className="card flex-fill">
-                <div className="card-body">
-                  <h4 className="card-title">Task Statistics</h4>
-                  <div className="statistics">
-                    <div className="row">
-                      <div className="col-md-6 col-6 text-center">
-                        <div className="stats-box mb-4">
-                          <p>Total Tasks</p>
-                          <h3>385</h3>
-                        </div>
+              <div className="card-body">
+                  <h4 className="card-title">Late Coming <span className="badge bg-inverse-danger ml-2">2</span></h4>
+                  <div className="leave-info-box">
+                    <div className="media align-items-center">
+                      <Link to = "/app/profile/employee-profile" className="avatar"><img alt="" src={User} /></Link>
+                      <div className="media-body">
+                        <div className="text-sm my-0">Martin Lewis</div>
                       </div>
-                      <div className="col-md-6 col-6 text-center">
-                        <div className="stats-box mb-4">
-                          <p>Overdue Tasks</p>
-                          <h3>19</h3>
-                        </div>
+                    </div>
+                    <div className="row align-items-center mt-3">
+                      <div className="col-6">
+                        <h6 className="mb-0">Madame tussauds</h6>
+                        <span className="text-sm text-muted">Timings : 16:30 - 21:00</span>
+                      </div>
+                      <div className="col-6 text-end">
+                      <span class="badge bg-danger text-white">30 min late</span>
                       </div>
                     </div>
                   </div>
-                  <div className="progress mb-4">
-                    <div className="progress-bar bg-purple" role="progressbar" style={{width: '30%'}} aria-valuenow={30} aria-valuemin={0} aria-valuemax={100}>30%</div>
-                    <div className="progress-bar bg-warning" role="progressbar" style={{width: '22%'}} aria-valuenow={18} aria-valuemin={0} aria-valuemax={100}>22%</div>
-                    <div className="progress-bar bg-success" role="progressbar" style={{width: '24%'}} aria-valuenow={12} aria-valuemin={0} aria-valuemax={100}>24%</div>
-                    <div className="progress-bar bg-danger" role="progressbar" style={{width: '26%'}} aria-valuenow={14} aria-valuemin={0} aria-valuemax={100}>21%</div>
-                    <div className="progress-bar bg-info" role="progressbar" style={{width: '10%'}} aria-valuenow={14} aria-valuemin={0} aria-valuemax={100}>10%</div>
+                  <div className="leave-info-box">
+                    <div className="media align-items-center">
+                      <Link to = "/app/profile/employee-profile" className="avatar"><img alt="" src={User} /></Link>
+                      <div className="media-body">
+                        <div className="text-sm my-0">Martin Lewis</div>
+                      </div>
+                    </div>
+                    <div className="row align-items-center mt-3">
+                      <div className="col-6">
+                        <h6 className="mb-0">Madame tussauds</h6>
+                        <span className="text-sm text-muted">Timings : 16:30 - 21:00</span>
+                      </div>
+                      <div className="col-6 text-end">
+                      <span class="badge bg-danger text-white">30 min late</span>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p><i className="fa fa-dot-circle-o text-purple me-2" />Completed Tasks <span className="float-end">166</span></p>
-                    <p><i className="fa fa-dot-circle-o text-warning me-2" />Inprogress Tasks <span className="float-end">115</span></p>
-                    <p><i className="fa fa-dot-circle-o text-success me-2" />On Hold Tasks <span className="float-end">31</span></p>
-                    <p><i className="fa fa-dot-circle-o text-danger me-2" />Pending Tasks <span className="float-end">47</span></p>
-                    <p className="mb-0"><i className="fa fa-dot-circle-o text-info me-2" />Review Tasks <span className="float-end">5</span></p>
+                  <div className="load-more text-center">
+                    <a className="text-dark" href="#">Take Action</a>
                   </div>
                 </div>
               </div>
@@ -376,7 +701,7 @@ const [menu, setMenu] = useState(false)
           </div>
           {/* /Statistics Widget */}
           <div className="row">
-            <div className="col-md-6 d-flex">
+            <div className="col-md-12 d-flex">
               <div className="card card-table flex-fill">
                 <div className="card-header">
                   <h3 className="card-title mb-0">Invoices</h3>
@@ -388,6 +713,7 @@ const [menu, setMenu] = useState(false)
                         <tr>
                           <th>Invoice ID</th>
                           <th>Client</th>
+                          <th>Subscription Date</th>
                           <th>Due Date</th>
                           <th>Total</th>
                           <th>Status</th>
@@ -400,6 +726,7 @@ const [menu, setMenu] = useState(false)
                             <h2><a href="#">Global Technologies</a></h2>
                           </td>
                           <td>11 Mar 2019</td>
+                          <td>11 Mar 2019</td>
                           <td>$380</td>
                           <td>
                             <span className="badge bg-inverse-warning">Partially Paid</span>
@@ -411,6 +738,7 @@ const [menu, setMenu] = useState(false)
                             <h2><a href="#">Delta Infotech</a></h2>
                           </td>
                           <td>8 Feb 2019</td>
+                          <td>8 Feb 2019</td>
                           <td>$500</td>
                           <td>
                             <span className="badge bg-inverse-success">Paid</span>
@@ -421,6 +749,7 @@ const [menu, setMenu] = useState(false)
                           <td>
                             <h2><a href="#">Cream Inc</a></h2>
                           </td>
+                          <td>23 Jan 2019</td>
                           <td>23 Jan 2019</td>
                           <td>$60</td>
                           <td>
@@ -436,7 +765,7 @@ const [menu, setMenu] = useState(false)
                 </div>
               </div>
             </div>
-            <div className="col-md-6 d-flex">
+            {/* <div className="col-md-6 d-flex">
               <div className="card card-table flex-fill">
                 <div className="card-header">
                   <h3 className="card-title mb-0">Payments</h3>
@@ -489,9 +818,9 @@ const [menu, setMenu] = useState(false)
                   <Link to = "/app/sales/payments">View all payments</Link>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="row">
+          {/* <div className="row">
             <div className="col-md-6 d-flex">
               <div className="card card-table flex-fill">
                 <div className="card-header">
@@ -803,7 +1132,7 @@ const [menu, setMenu] = useState(false)
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         {/* /Page Content */}
       </div>

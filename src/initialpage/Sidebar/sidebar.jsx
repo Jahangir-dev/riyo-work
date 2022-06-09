@@ -44,11 +44,13 @@ const toggleLevelThree = (value) => {
         <div className="sidebar-inner slimscroll">
           <div id="sidebar-menu" className="sidebar-menu">
             <ul>
-              <li className="menu-title"> 
+              {/* <li className="menu-title"> 
                 <span>Main</span>
-              </li>
-              <li className="submenu">
-                <a href="#" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={()=> toggleSidebar(isSideMenu =="dashboard" ? "": "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span> <span className="menu-arrow" /></a>
+              </li> */}
+              {/* <li className="submenu">
+                <a href="#" className={isSideMenu == "dashboard" ? "subdrop" : ""} onClick={()=> toggleSidebar(isSideMenu =="dashboard" ? "": "dashboard")}><i className="la la-dashboard" /> <span> Dashboard</span>
+                  <span className="menu-arrow" />
+                </a>
                 { isSideMenu == "dashboard" ? 
                 <ul >
                   <li><Link className={pathname.includes('main/dashboard') ?"active" :""} to="/app/main/dashboard">Admin Dashboard</Link></li>
@@ -57,12 +59,31 @@ const toggleLevelThree = (value) => {
                 </ul>
                 	:"" 
                 }
+              </li> */}
+              <li><Link className={pathname.includes('dashboard') || pathname.includes('dashboard') ?"active" :""} 
+                        to="/app/main/dashboard" ><i className="la la-dashboard" /> <span> Dashboard</span></Link></li>
+              <li><Link className={pathname.includes('shift-scheduling') || pathname.includes('shift-list') ?"active" :""} 
+                        to="/app/employee/shift-scheduling" ><i className="la la-users" /> <span> Shift &amp; Schedule</span></Link></li>
+              <li><Link className={pathname.includes('training-list') ?"active" :""} to="/app/training/training-list"> <i className="la la-graduation-cap" /> <span> Training</span></Link></li>
+              <li><Link className={pathname.includes('payroll-items') ?"active" :""} to="/app/payroll/payroll-items"><i className="la la-money" /> <span> Payroll </span></Link></li>
+              <li><Link className={pathname.includes('attendance-') ?"active" :""} to="/app/reports/attendance-reports"> <i className="la la-th-list" /> <span> Reports </span> </Link></li>
+              <li className={pathname.includes('clients') ?"active" :""}> 
+                <Link to = "/app/employees/clients"><i className="la la-industry" /> <span>Companies</span></Link>
               </li>
+              
+
+
               <li className="submenu">
-                <a href="#" className={isSideMenu == "apps" ? "subdrop" : ""} onClick={()=> toggleSidebar(isSideMenu =="apps" ? "": "apps")} ><i className="la la-cube" /> <span> Apps</span> <span className="menu-arrow" /></a>
+                <a href="#" className={isSideMenu == "apps" ? "subdrop" : ""} onClick={()=> toggleSidebar(isSideMenu =="apps" ? "": "apps")} ><i className="las la-toolbox" /> <span> Administration</span> <span className="menu-arrow" /></a>
+                
                 { isSideMenu == "apps" ? 
                 <ul>
-                  <li><Link onClick={()=>localStorage.setItem("minheight","true")} to="/conversation/chat">Chat</Link></li>
+                  <li><Link className={pathname.includes('file-manager') ?"active" :""} to="/app/apps/file-manager"><i className="la la-folder" /> <span>My Files</span></Link></li>
+                  <li className={pathname.includes('policies') ?"active" :""}> <Link to = "/app/hr/policies"><i className="la la-file-pdf-o" /> <span>Policies</span></Link></li>
+                  <li className={pathname.includes('administrator/users') ?"active" :""}> <Link to = "/app/administrator/users"><i className="la la-user-plus" /> <span>Users</span></Link></li>
+                  <li className={pathname.includes('clients') ?"active" :""}> <Link to = "/app/employees/clients"><i className="la la-hand-o-up" /> <span>Subscrptions</span></Link></li>
+                  <li> <Link to = "/settings/companysetting"><i className="la la-cog" /> <span>Settings</span></Link></li>
+                  {/* <li><Link onClick={()=>localStorage.setItem("minheight","true")} to="/conversation/chat">Chat</Link></li>
                   <li className="submenu">
                     <a href="#" className={level2Menu == "calls" ? "subdrop" : ""} onClick={()=> toggleLvelTwo(level2Menu =="calls" ? "": "calls")}><span> Calls</span> <span className="menu-arrow" /></a>
                     { level2Menu == "calls" ?  
@@ -74,16 +95,19 @@ const toggleLevelThree = (value) => {
                     </ul>
                     :"" 
                   }
-                  </li>
-                  <li><Link className={pathname.includes('apps/calendar') ?"active" :""} to="/app/apps/calendar">Calendar</Link></li>
+                  </li> */}
+                  {/* <li><Link className={pathname.includes('apps/calendar') ?"active" :""} to="/app/apps/calendar">Calendar</Link></li>
                   <li><Link onClick={()=>localStorage.setItem("minheight","true")} className={pathname.includes('contacts') ?"active" :""} to="/app/apps/contacts">Contacts</Link></li>
-                  <li><Link to = "/email/inbox">Email</Link></li>
-                  <li><Link className={pathname.includes('file-manager') ?"active" :""} to="/app/apps/file-manager">File Manager</Link></li>
+                  <li><Link to = "/email/inbox">Email</Link></li> */}
+                  
                 </ul>
                 	:"" 
                 }
-              </li>            
-              <li className="submenu" >             
+              </li>    
+              <li className={pathname.includes('clients') ?"active" :""}> 
+                <Link to = "/app/employees/clients"><i className="la la-power-off" /> <span>Logout</span></Link>
+              </li>        
+              {/* <li className="submenu" >             
                 <a href="#" className= {isSideMenu == "employee" ? "subdrop" : ""} onClick={()=> toggleSidebar(isSideMenu =="employee" ? "": "employee")}><i className="la la-user" /> <span className="noti-dot"> Employees</span> <span className="menu-arrow" /></a>
                 { isSideMenu == "employee" ? 
                 
@@ -408,7 +432,7 @@ const toggleLevelThree = (value) => {
                 </ul>
                 :"" 
               }
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

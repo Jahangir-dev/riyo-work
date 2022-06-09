@@ -24,7 +24,7 @@ const EmployeeDashboard = () => {
           <Sidebar /> 
         <div className="page-wrapper"> 
             <Helmet>
-                <title>Dashboard - HRMS Admin Template</title>
+                <title>Dashboard - Riyo Work</title>
                 <meta name="description" content="Dashboard"/>					
             </Helmet>
             {/* Page Content */}

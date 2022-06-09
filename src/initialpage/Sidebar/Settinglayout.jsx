@@ -8,7 +8,7 @@ import { Route, withRouter } from 'react-router-dom';
 import settingservice from "../../router_service/settingservice";
 
 import Header from './header';
-import SettingsSidebar from './settingsidebar';
+import Sidebar from './Sidebar';
 
 const SettingsLayout = (props) => {
 
@@ -28,7 +28,7 @@ const SettingsLayout = (props) => {
 						<Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
 					)}
 				</div>				
-				<SettingsSidebar/>
+				<Sidebar/>
 				</div>
 			</>
 		);

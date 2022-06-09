@@ -23,7 +23,7 @@ import {headerlogo,lnEnglish,lnFrench,lnSpanish,lnGerman, Avatar_02,Avatar_03,Av
         {/* Logo */}
         <div className="header-left">
           <Link to="/app/main/dashboard" className="logo">
-            <img src={headerlogo} width={40} height={40} alt="" />
+            <img src={headerlogo} height={60} alt="" />
           </Link>
         </div>
         {/* /Logo */}
@@ -35,7 +35,7 @@ import {headerlogo,lnEnglish,lnFrench,lnSpanish,lnGerman, Avatar_02,Avatar_03,Av
         </a>
         {/* Header Title */}
         <div className="page-title-box">
-          <h3>Dreamguy's Technologies</h3>
+          <h3>Riyo Work</h3>
         </div>
         {/* /Header Title */}
         <a id="mobile_btn" className="mobile_btn" href="#" onClick={() => onMenuClik()}><i className="fa fa-bars" /></a>
@@ -269,7 +269,7 @@ import {headerlogo,lnEnglish,lnFrench,lnSpanish,lnGerman, Avatar_02,Avatar_03,Av
             <a href="#" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
               <span className="user-img me-1"><img src={Avatar_21} alt="" />
                 <span className="status online" /></span>
-              <span>Admin</span>
+              <span>Super Admin</span>
             </a>
             <div className="dropdown-menu">
               <Link className="dropdown-item" to="/app/profile/employee-profile">My Profile</Link>
