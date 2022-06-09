@@ -105,7 +105,7 @@ const toggleLevelThree = (value) => {
                 }
               </li>    
               <li > 
-                <Link ><i className="la la-power-off" /> <span>Logout</span></Link>
+                <Link to = "/app/employees/clients"><i className="la la-power-off" /> <span>Logout</span></Link>
               </li>        
               {/* <li className="submenu" >             
                 <a href="#" className= {isSideMenu == "employee" ? "subdrop" : ""} onClick={()=> toggleSidebar(isSideMenu =="employee" ? "": "employee")}><i className="la la-user" /> <span className="noti-dot"> Employees</span> <span className="menu-arrow" /></a>
