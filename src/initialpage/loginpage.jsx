@@ -69,11 +69,11 @@ const Loginpage = (props) => {
          
          <>
            <Helmet>
-               <title>Login - HRMS Admin Template</title>
+               <title>Login - Riyo Work</title>
                <meta name="description" content="Login page"/>					
          </Helmet>
         <div className="account-content">
-          <Link to="/applyjob/joblist" className="btn btn-primary apply-btn">Apply Job</Link>
+          {/* <Link to="/applyjob/joblist" className="btn btn-primary apply-btn">Apply Job</Link> */}
           <div className="container">
             {/* Account Logo */}
             <div className="account-logo">
@@ -135,7 +135,7 @@ const Loginpage = (props) => {
                   </div>
                   </form>
                   <div className="account-footer">
-                    <p>Don't have an account yet? <Link to="/register">Register</Link></p>
+                    {/* <p>Don't have an account yet? <Link to="/register">Register</Link></p> */}
                   </div>
                 </div>
                 {/* /Account Form */}

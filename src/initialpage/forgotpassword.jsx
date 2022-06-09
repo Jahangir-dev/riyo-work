@@ -11,7 +11,7 @@ const ForgotPassword = () => {
       return (
           <>
             <Helmet>
-                    <title>Forgot Password - HRMS Admin Template</title>
+                    <title>Forgot Password - Riyo Work </title>
                     <meta name="description" content="Login page"/>					
             </Helmet>
           <div className="account-content">
@@ -19,7 +19,7 @@ const ForgotPassword = () => {
             <div className="container">
               {/* Account Logo */}
               <div className="account-logo">
-                <Link to="/app/main/dashboard"><img src={Applogo} alt="Dreamguy's Technologies" /></Link>
+                <Link to="/app/main/dashboard"><img src={Applogo} alt="Dreamguy's Technologies" style={{width: '206px'}} /></Link>
               </div>
               {/* /Account Logo */}
               <div className="account-box">
