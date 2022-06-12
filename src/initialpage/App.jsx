@@ -21,6 +21,10 @@ import uicomponents from '../MainPage/UIinterface/components';
 import Error404 from '../MainPage/Pages/ErrorPage/error404';
 import Error500 from '../MainPage/Pages/ErrorPage/error500';
 
+import { Provider } from 'react-redux'
+import { store } from '../redux/store'
+
+import {isUserLoggedIn} from '../utils'
 
 // import 'Assets/css/font-awesome.min.css';
 
@@ -56,19 +60,20 @@ export default class App extends Component {
     }
        render(){
             const { location, match, user } = this.props;
-            
-            
-            // if (location.pathname === '/') {
-            // if (user === null) {
-            //     return (<Redirect to={'/login'} />);
-            // } else {
-            //     return (<Redirect to={'/app/main/dashboard'} />);
-            // }
-            // }
-            if (location.pathname === '/') {                 
-                   return (<Redirect to={'/app/main/dashboard'} />);                
-             }
+            console.log('=======')
+            console.log(isUserLoggedIn());
+            if (location.pathname === '/') {
+            if (isUserLoggedIn() === null) {
+                return (<Redirect to={'/login'} />);
+            } else {
+                return (<Redirect to={'/app/main/dashboard'} />);
+            }
+            }
+            // if (location.pathname === '/') {                 
+            //        return (<Redirect to={'/app/main/dashboard'} />);                
+            //  }
             return (
+                <Provider store={store}>
                 <Switch>
                     {/* <InitialPath
                         path={`${match.url}app`}
@@ -93,6 +98,7 @@ export default class App extends Component {
                     <Route path="/error-404" component={Error404} />
                     <Route path="/error-500" component={Error500} />
                 </Switch>
+            </Provider>
             )
         }
          

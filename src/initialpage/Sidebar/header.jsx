@@ -3,19 +3,25 @@
  */
  import React,  {useState} from 'react'
 import { withRouter } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { handleLogout } from "../../redux/authentication";
 import {headerlogo,lnEnglish,lnFrench,lnSpanish,lnGerman, Avatar_02,Avatar_03,Avatar_05,
   Avatar_06,Avatar_08,Avatar_09,Avatar_13,Avatar_17,Avatar_21} from '../../Entryfile/imagepath'
 
   const Header = (props) => {
-
+    const history = useHistory()
+    const dispatch = useDispatch()
     const handlesidebar=()=>{
       document.body.classList.toggle('mini-sidebar');
     }
     const onMenuClik = () => {
       props.onMenuClick()
     }
-
+    const onLogoutClik = () => {
+      dispatch(handleLogout());
+      history.push('/login');
+    }
     let pathname = location.pathname
     
       return (
@@ -274,7 +280,7 @@ import {headerlogo,lnEnglish,lnFrench,lnSpanish,lnGerman, Avatar_02,Avatar_03,Av
             <div className="dropdown-menu">
               <Link className="dropdown-item" to="/app/profile/employee-profile">My Profile</Link>
               <Link className="dropdown-item" to="/settings/companysetting">Settings</Link>
-              <Link className="dropdown-item" to="/login">Logout</Link>
+              <a className="dropdown-item" onClick={() => onLogoutClik()}>Logout</a>
             </div>
           </li>
         </ul>
@@ -285,7 +291,7 @@ import {headerlogo,lnEnglish,lnFrench,lnSpanish,lnGerman, Avatar_02,Avatar_03,Av
           <div className="dropdown-menu dropdown-menu-right">
             <Link className="dropdown-item" to="/app/profile/employee-profile">My Profile</Link>
             <Link className="dropdown-item" to="/settings/companysetting">Settings</Link>
-            <Link className="dropdown-item" to="/login">Logout</Link>
+            <a className="dropdown-item" onClick={() => onLogoutClik()}>Logout</a>
           </div>
         </div>
         {/* /Mobile Menu */}

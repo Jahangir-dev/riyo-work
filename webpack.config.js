@@ -63,10 +63,10 @@ module.exports = {
  externals: {
   // global app config object
   config: JSON.stringify({
-      apiUrl: '',
+      apiUrl: '127.0.0.1:8000',
       imageapiUrl: '',
       
-      publicPath : '/blue'            
+      publicPath : '/'            
   })
 },
  resolve: {
