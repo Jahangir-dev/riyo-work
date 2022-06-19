@@ -8,6 +8,7 @@ import ForgotPassword from './forgotpassword'
 import OTP from './otp'
 import LockScreen from './lockscreen'
 import ApplyJobs from './ApplyJob';
+import Admindashboard from '../MainPage/Main/Dashboard/admindashboard'
 
 //Main App
 import DefaultLayout from './Sidebar/DefaultLayout';
@@ -20,34 +21,33 @@ import uicomponents from '../MainPage/UIinterface/components';
 //Error Page
 import Error404 from '../MainPage/Pages/ErrorPage/error404';
 import Error500 from '../MainPage/Pages/ErrorPage/error500';
-
 import { Provider } from 'react-redux'
 import { store } from '../redux/store'
 
 import {isUserLoggedIn} from '../utils'
 
-// import 'Assets/css/font-awesome.min.css';
+ import 'Assets/css/font-awesome.min.css';
 
 
-// window.jQuery = $;
-// window.$ = $;
-// import UserPage from './pages/UserPage'
+window.jQuery = $;
+window.$ = $;
+//import UserPage from './pages/UserPage'
 /**
  * Initial Path To Check Whether User Is Logged In Or Not
  */
-// const InitialPath = ({ component: Component, ...rest, authUser }) =>
-//    <Route
-//       {...rest}
-//       render={props =>
-//          authUser
-//             ? <Component {...props} />
-//             : <Redirect
-//                to={{
-//                   pathname: '/login',
-//                   state: { from: props.location }
-//                }}
-//             />}
-//    />;
+const InitialPath = ({ component: Component, authUser, ...rest }) =>
+   <Route
+      {...rest}
+      render={props =>
+         authUser
+            ? <Component {...props} />
+            : <Redirect
+               to={{
+                  pathname: '/login',
+                  state: { from: props.location }
+               }}
+            />}
+   />;
 
 export default class App extends Component {
     componentDidMount(){
@@ -60,40 +60,32 @@ export default class App extends Component {
     }
        render(){
             const { location, match, user } = this.props;
-            console.log('=======')
-            console.log(isUserLoggedIn());
-            if (location.pathname === '/') {
-            if (isUserLoggedIn() === null) {
-                return (<Redirect to={'/login'} />);
-            } else {
-                return (<Redirect to={'/app/main/dashboard'} />);
-            }
-            }
-            // if (location.pathname === '/') {                 
-            //        return (<Redirect to={'/app/main/dashboard'} />);                
-            //  }
+            if (location.pathname === '/' && isUserLoggedIn() == null) {                 
+                   return (<Redirect to={'/login'} />);                
+             } 
             return (
                 <Provider store={store}>
                 <Switch>
-                    {/* <InitialPath
+                    <InitialPath
                         path={`${match.url}app`}
-                        // authUser={user}
+                        authUser={ window.localStorage.getItem('userData')}
                         component={DefaultLayout}
-                    /> */}
-                    {/* <Redirect exact from={`${match.url}/`} to={`${match.url}/login`} /> */}
-                    <Route path="/login" component={LoginPage} />
-                    <Route path="/forgotpassword" component={ForgotPassword} />
-                    <Route path="/register" component={RegistrationPage} />
-                    <Route path="/otp" component={OTP} />
-                    <Route path="/lockscreen" component={LockScreen} />
-                    <Route path="/applyjob" component={ApplyJobs} />
+                    />
+                     <Redirect exact from={`${match.url}/`} to={`${match.url}/login`} />
+                        
+                        <Route path="/login" component={LoginPage} />
+                        <Route path="/forgotpassword" component={ForgotPassword} />
+                        <Route path="/register" component={RegistrationPage} />
+                        <Route path="/otp" component={OTP} />
+                        <Route path="/lockscreen" component={LockScreen} />
+                        <Route path="/applyjob" component={ApplyJobs} />
 
-                    <Route path="/app" component={DefaultLayout} />
-                    <Route path="/settings" component={Settinglayout} />
-                    <Route path="/tasks" component={Tasklayout} />
-                    <Route path="/email" component={Emaillayout} />
-                    <Route path="/conversation" component={chatlayout} />
-                    
+                        <Route path="/app" component={DefaultLayout} />
+                        <Route path="/settings" component={Settinglayout} />
+                        <Route path="/tasks" component={Tasklayout} />
+                        <Route path="/email" component={Emaillayout} />
+                        <Route path="/conversation" component={chatlayout} />
+                        
                     <Route path="/ui-components" component={uicomponents} />
                     <Route path="/error-404" component={Error404} />
                     <Route path="/error-500" component={Error500} />

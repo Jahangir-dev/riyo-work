@@ -35,10 +35,7 @@ const Loginpage = (props) => {
   const [nameerror, setNameError] = useState("");
   const [passworderror, setPasswordError] = useState("");
   const [formgroup, setFormGroup] = useState("");
-  const [inputValues, setInputValues] = useState({
-    email: "admin@admin.com",
-    password: "admin123",
-  });
+  const [inputValues, setInputValues] = useState();
   const [isLoading, setIsLoading] = useState(false)
   const history = useHistory()
   const dispatch = useDispatch()
@@ -54,8 +51,7 @@ const Loginpage = (props) => {
   });
 
   const onSubmit = (data) => {
-    console.log("data", data);
-
+ 
     // if (data.password != "123456") {
     //   setError("password", {
     //     message: "password is mismatch",
