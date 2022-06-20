@@ -14,6 +14,7 @@ import SimpleReactValidator from "simple-react-validator";
 
 //import jwt from "../auth/useJwt";
 
+
 const Settings = () => {
   const simpleValidator = useRef(new SimpleReactValidator());
   const [, forceUpdate] = useState();
@@ -23,7 +24,7 @@ const Settings = () => {
     company_name: "",
     conact_person:"",
     address:"",
-    country:"",
+    country_id:"",
     state_id:"",
     city:"",
     postal_code:"",
@@ -39,7 +40,7 @@ const Settings = () => {
     company_name: "",
     conact_person:"",
     address:"",
-    country:"",
+    country_id:"",
     state_id:"",
     city:"",
     postal_code:"",
@@ -48,7 +49,6 @@ const Settings = () => {
     mobile_number:"",
     fax:"",
     website_url:""
-
   });
 
   const [countries, setCountries] = useState([]);
@@ -62,13 +62,47 @@ const Settings = () => {
     axios.get("/countries").then((res) => {
       setCountries(res.data.data);
     });
+  
+  
+    jwt.get('/getSettings').then((res) => {
+      formData.company_name = res.data.company_name
+      formData.conact_person= res.data.conact_person,
+      formData.address= res.data.address,
+      formData.email= res.data.email,
+      formData.postal_code= res.data.postal_code,
+      formData.phone_number= res.data.phone_number,
+      formData.mobile_number= res.data.mobile_number,
+      formData.fax= res.data.fax,
+      formData.website_url= res.data.website_url
+      console.log(res.data)
+      if(res.data.country_id)
+      {
+        axios.get("/states/"+res.data.country_id).then((response) => {
+          setStates(response.data.data);
+          setState(res.data.state_id)
+        });
+      }
+      if(res.data.state_id)
+      {
+      axios.get("/cities/"+res.data.state_id).then((response) => {
+        setCities(response.data.data);
+        setCity(res.data.city)
+      });
+    }
+      setCountry(res.data.country_id)
+     
+     
+      forceUpdate(1)
+    }).catch((err) =>{ console.log(err);
+      
+    });
   }, []);
 
   
 
   function getState(val) {
     setCountry(val.value)
-    formData.country = val.value;
+    formData.country_id = val.value;
     axios.get("/states/"+val.value).then((res) => {
       setStates(res.data.data);
     });
@@ -127,10 +161,16 @@ const Settings = () => {
       simpleValidator.current.showMessages(true);
       forceUpdate(1)
     } else {
+      jwt.post('/addSettings',formData).then((res) => {
+        
+      }).catch((err) =>{ console.log(err);
+        
+      });
       console.log(formData);
     }
   };
 
+  console.log(country+city+state)
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -162,7 +202,7 @@ const Settings = () => {
                       className="form-control"
                       type="text"
                       onChange={handleChange}
-
+                      value={formData.company_name}
                       onBlur={() => {
                         simpleValidator.current.showMessageFor("company_name")
                         forceUpdate(1);
@@ -177,6 +217,7 @@ const Settings = () => {
                     <input
                       name="conact_person"
                       className="form-control "
+                      value={formData.company_person}
                       type="text"
                       onChange={handleChange}
                     />
@@ -189,7 +230,8 @@ const Settings = () => {
                     <label>Address</label>
                     <input
                       name="address"
-                      className="form-control "
+                      className="form-control"
+                      value={formData.address}
                       onChange={handleChange}
                       type="text"
 
@@ -232,6 +274,7 @@ const Settings = () => {
                     <input
                       name="postal_code"
                       className="form-control"
+                      value={formData.postal_code}
                       onChange={handleChange}
                       type="text"
                     />
@@ -262,6 +305,7 @@ const Settings = () => {
                     <input
                       name="phone_number"
                       className="form-control"
+                      value={formData.phone_number}
                       onChange={handleChange}
                       type="text"
                     />
@@ -275,6 +319,7 @@ const Settings = () => {
                     <input
                       name="mobile_number"
                       className="form-control"
+                      value={formData.mobile_number}
                       onChange={handleChange}
                       type="text"
                     />
@@ -286,6 +331,7 @@ const Settings = () => {
                     <input
                       name="fax"
                       className="form-control"
+                      value={formData.fax}
                       onChange={handleChange}
                       type="text"
                     />
@@ -299,6 +345,7 @@ const Settings = () => {
                     <input
                       className="form-control"
                       name="website_url"
+                      value={formData.website_url}
                       onChange={handleChange}
                       type="url"
                     />
