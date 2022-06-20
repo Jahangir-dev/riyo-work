@@ -17,7 +17,7 @@ import "../antdstyle.css"
 import  Adduser from "../../_components/modelbox/Adduser"
 
 const Users = () => {
-
+  
   const [data, setData] = useState([
     // {id:1,name:"Bernardo Galaviz",image:Avatar_01,email:"bernardogalaviz@example.com",company:"Global Technologies",created_date:"5 Jan 2019",role:"Client"},
     // {id:2,name:"Catherine Manseau",image:Avatar_02,email:"catherinemanseau@example.com",company:"Dreamguy's Technologies",created_date:"5 Jan 2019",role:"Admin"},

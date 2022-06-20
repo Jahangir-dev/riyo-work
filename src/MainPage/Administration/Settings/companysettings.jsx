@@ -1,19 +1,9 @@
-/**
- * Signin Firebase
- */
-
 import React, { useState, useEffect,useRef  } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import Select from 'react-select';
 import jwt from "../../../auth/useJwt";
-import { useForm, Controller } from "react-hook-form";
 import SimpleReactValidator from "simple-react-validator";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import * as yup from "yup";
-
-//import jwt from "../auth/useJwt";
-
 
 const Settings = () => {
   const simpleValidator = useRef(new SimpleReactValidator());
