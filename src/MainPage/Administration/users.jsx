@@ -2,7 +2,7 @@
  * Signin Firebase
  */
 
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useRef } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
 import axios from "axios";
@@ -15,9 +15,10 @@ import 'antd/dist/antd.css';
 import {itemRender,onShowSizeChange} from "../paginationfunction"
 import "../antdstyle.css"
 import  Adduser from "../../_components/modelbox/Adduser"
+import SimpleReactValidator from "simple-react-validator";
 
 const Users = () => {
-  
+  const [edit,  SetEdit] = useState();
   const [data, setData] = useState([
     // {id:1,name:"Bernardo Galaviz",image:Avatar_01,email:"bernardogalaviz@example.com",company:"Global Technologies",created_date:"5 Jan 2019",role:"Client"},
     // {id:2,name:"Catherine Manseau",image:Avatar_02,email:"catherinemanseau@example.com",company:"Dreamguy's Technologies",created_date:"5 Jan 2019",role:"Admin"},
@@ -32,6 +33,72 @@ const Users = () => {
     // {id:11,name:"Tarah Shropshire",image:Avatar_11,email:"tarahshropshire@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
     // {id:12,name:"Wilmer Deluna",image:Avatar_12,email:"wilmerdeluna@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
   ]);
+
+  const simpleValidator = useRef(new SimpleReactValidator());
+  const [, forceUpdate] = useState();
+  const [selectedRole, setSelectedClient] = useState('admin');
+  const form = React.createRef();
+  const initialFormData = Object.freeze({});
+  const [formData, updateFormData] = useState({
+    first_name: "",
+    last_name:"",
+    password:"",
+    re_password:"",
+    employee_id:"",
+    user_name:"",
+    email:"",
+    phone_number:"",
+    role:"",
+    employee_read : "",
+    employee_write:"",
+    employee_create: "",
+    employee_delete:"",
+    employee_import:"",
+    employee_export:"",
+
+    holiday_read : "",
+    holiday_write:"",
+    holiday_create: "",
+    holiday_delete:"",
+    holiday_import:"",
+    holiday_export:"",
+
+    leave_read : "",
+    leave_write:"",
+    leave_create: "",
+    leave_delete:"",
+    leave_import:"",
+    leave_export:"",
+
+    event_read : "",
+    event_write:"",
+    event_create: "",
+    event_delete:"",
+    event_import:"",
+    event_export:""
+  });
+
+  const [formDataValidation, updateFormDataValidation] = useState({
+    first_name: "",
+    last_name:"",
+    password:"",
+    re_password:"",
+    employee_id:"",
+    user_name:"",
+    email:"",
+    phone_number:"",
+    role:""
+  });
+
+  const handleChange = (e) => {
+    updateFormData({
+      ...formData,
+
+      // Trimming any whitespace
+      [e.target.name]: e.target.value.trim()
+    });
+  };
+
   useEffect( ()=>{
     jwt
     .get('/users')
@@ -52,6 +119,24 @@ const Users = () => {
     }
   },[]);  
 
+  function handleSelectChange(event) {
+    setSelectedClient(event.target.value);
+  }
+
+  const handleSubmit = (e) => {
+    const formValid = simpleValidator.current.allValid();
+    if (!formValid) {
+      simpleValidator.current.showMessages(true);
+      forceUpdate(1)
+    } else {
+      // jwt.post('/addSettings',formData).then((res) => {
+        
+      // }).catch((err) =>{ console.log(err);
+        
+      // });
+      console.log(formData);
+    }
+  };
     const columns = [
       
       {
@@ -98,7 +183,7 @@ const Users = () => {
             <div className="dropdown dropdown-action text-end">
               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
               <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_user"><i className="fa fa-pencil m-r-5" /> Edit</a>
+                <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_user" onClick={() => SetEdit(record)}><i className="fa fa-pencil m-r-5" /> Edit</a>
                 <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_user"><i className="fa fa-trash-o m-r-5" /> Delete</a>
               </div>
             </div>
@@ -201,57 +286,120 @@ const Users = () => {
                       </button>
                     </div>
                     <div className="modal-body">
-                      <form>
+                    <form ref={form}>
                         <div className="row">
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>First Name <span className="text-danger">*</span></label>
-                              <input className="form-control" defaultValue="John" type="text" />
+                              <input className="form-control" type="text" 
+                              name="first_name"
+                              onChange={handleChange}
+                              value={formData.first_name}
+                              onBlur={() => {
+                                simpleValidator.current.showMessageFor("first_name")
+                                forceUpdate(1);
+                              }} 
+                              />
+                               {simpleValidator.current.message("first_name", formData.first_name, "required")}
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Last Name</label>
-                              <input className="form-control" defaultValue="Doe" type="text" />
+                              <input className="form-control" type="text" 
+                              name="last_name"
+                              onChange={handleChange}
+                              value={formData.last_name}
+                              onBlur={() => {
+                                simpleValidator.current.showMessageFor("last_name")
+                                forceUpdate(1);
+                              }}
+                              />
+                              {simpleValidator.current.message("last_name", formData.last_name, "required")}
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Username <span className="text-danger">*</span></label>
-                              <input className="form-control" defaultValue="johndoe" type="text" />
+                              <input className="form-control" type="text" 
+                               name="user_name"
+                               onChange={handleChange}
+                               value={formData.user_name}
+                               onBlur={() => {
+                                 simpleValidator.current.showMessageFor("user_name")
+                                 forceUpdate(1);
+                               }}
+                              />
+                              {simpleValidator.current.message("user_name", formData.user_name, "required")}
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Email <span className="text-danger">*</span></label>
-                              <input className="form-control" defaultValue="johndoe@example.com" type="email" />
+                              <input className="form-control" type="email" 
+                              name="email"
+                              onChange={handleChange}
+                              value={formData.email}
+                              onBlur={() => {
+                                simpleValidator.current.showMessageFor("email")
+                                forceUpdate(1);
+                              }}
+                              />
+                              {simpleValidator.current.message("email", formData.email, "required|email")}
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Password</label>
-                              <input className="form-control" type="password" />
+                              <input className="form-control" type="password"  
+                              name="password"
+                              onChange={handleChange}
+                              value={formData.password}
+                              onBlur={() => {
+                                simpleValidator.current.showMessageFor("password")
+                                forceUpdate(1);
+                              }} />
+                              {simpleValidator.current.message("password", formData.password, "required")}
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Confirm Password</label>
-                              <input className="form-control" type="password" />
+                              <input className="form-control" type="password"  
+                              name="re_password"
+                              onChange={handleChange}
+                              value={formData.re_password}
+                              onBlur={() => {
+                                simpleValidator.current.showMessageFor("re_password")
+                                forceUpdate(1);
+                              }}
+                              />
+                              {simpleValidator.current.message("re_password", formData.re_password, "required")}
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Phone </label>
-                              <input className="form-control" defaultValue={9876543210} type="text" />
+                              <input className="form-control" type="text" 
+                              name="phone_number"
+                              onChange={handleChange}
+                              value={formData.phone_number}
+                              onBlur={() => {
+                                simpleValidator.current.showMessageFor("phone_number")
+                                forceUpdate(1);
+                              }}
+                              />
+                              {simpleValidator.current.message("phone_number", formData.phone_number, "required")}
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Role</label>
-                              <select className="select">
-                                <option>Admin</option>
-                                <option>Client</option>
-                                <option >Employee</option>
+                              <select className="select" value={selectedRole} onChange={handleSelectChange}
+                              >
+                                <option value='admin'>Admin</option>
+                                <option value='client'>Client</option>
+                                <option value='employee'>Employee</option>
                               </select>
                             </div>
                           </div>
@@ -267,7 +415,16 @@ const Users = () => {
                           <div className="col-sm-6">  
                             <div className="form-group">
                               <label>Employee ID <span className="text-danger">*</span></label>
-                              <input type="text" defaultValue="FT-0001" className="form-control floating" />
+                              <input type="text" className="form-control floating" 
+                               name="employee_id"
+                               onChange={handleChange}
+                               value={formData.employee_id}
+                               onBlur={() => {
+                                 simpleValidator.current.showMessageFor("employee_id")
+                                 forceUpdate(1);
+                               }}
+                              />
+                              {simpleValidator.current.message("employee_id", formData.employee_id, "required")}
                             </div>
                           </div>
                         </div>
@@ -288,92 +445,176 @@ const Users = () => {
                               <tr>
                                 <td>Employee</td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox"  
+                                  name="employee_read"
+                                  onChange={handleChange}
+                                  checked={formData.employee_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox"  name="employee_write"
+                                  onChange={handleChange}
+                                  checked={formData.employee_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="employee_create"
+                                   onChange={handleChange}
+                                   checked={formData.employee_create}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="employee_delete"
+                                   onChange={handleChange}
+                                   checked={formData.employee_delete}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="employee_import"
+                                    onChange={handleChange}
+                                    checked={formData.employee_import}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="employee_export"
+                                    onChange={handleChange}
+                                    checked={formData.employee_export}
+                                  />
                                 </td>
                               </tr>
                               <tr>
                                 <td>Holidays</td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox"  
+                                  name="holiday_read"
+                                  onChange={handleChange}
+                                  checked={formData.holiday_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox"  name="holiday_write"
+                                  onChange={handleChange}
+                                  checked={formData.holiday_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="holiday_create"
+                                   onChange={handleChange}
+                                   checked={formData.holiday_create}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="holiday_delete"
+                                   onChange={handleChange}
+                                   checked={formData.holiday_delete}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="holiday_import"
+                                    onChange={handleChange}
+                                    checked={formData.holiday_import}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="holiday_export"
+                                    onChange={handleChange}
+                                    checked={formData.holiday_export}
+                                  />
                                 </td>
                               </tr>
                               <tr>
                                 <td>Leaves</td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox"  
+                                  name="leave_read"
+                                  onChange={handleChange}
+                                  checked={formData.leave_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox"  name="leave_write"
+                                  onChange={handleChange}
+                                  checked={formData.leave_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="leave_create"
+                                   onChange={handleChange}
+                                   checked={formData.leave_create}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="leave_delete"
+                                   onChange={handleChange}
+                                   checked={formData.leave_delete}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="leave_import"
+                                    onChange={handleChange}
+                                    checked={formData.leave_import}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="leave_export"
+                                    onChange={handleChange}
+                                    checked={formData.leave_export}
+                                  />
                                 </td>
                               </tr>
                               <tr>
                                 <td>Events</td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox"  
+                                  name="event_read"
+                                  onChange={handleChange}
+                                  checked={formData.event_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox"  name="event_write"
+                                  onChange={handleChange}
+                                  checked={formData.event_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="event_create"
+                                   onChange={handleChange}
+                                   checked={formData.event_create}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="event_delete"
+                                   onChange={handleChange}
+                                   checked={formData.event_delete}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="event_import"
+                                    onChange={handleChange}
+                                    checked={formData.event_import}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input defaultChecked type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="event_export"
+                                    onChange={handleChange}
+                                    checked={formData.event_export}
+                                  />
                                 </td>
                               </tr>
                             </tbody>
                           </table>
                         </div>
                         <div className="submit-section">
-                          <button className="btn btn-primary submit-btn">Save</button>
+                          <button onClick={handleSubmit} type="button" className="btn btn-primary submit-btn">Submit</button>
                         </div>
                       </form>
                     </div>

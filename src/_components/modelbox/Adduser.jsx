@@ -19,7 +19,33 @@ import Select from 'react-select';
       email:"",
       phone_number:"",
       role:"",
-  
+      employee_read : "",
+      employee_write:"",
+      employee_create: "",
+      employee_delete:"",
+      employee_import:"",
+      employee_export:"",
+
+      holiday_read : "",
+      holiday_write:"",
+      holiday_create: "",
+      holiday_delete:"",
+      holiday_import:"",
+      holiday_export:"",
+
+      leave_read : "",
+      leave_write:"",
+      leave_create: "",
+      leave_delete:"",
+      leave_import:"",
+      leave_export:"",
+
+      event_read : "",
+      event_write:"",
+      event_create: "",
+      event_delete:"",
+      event_import:"",
+      event_export:""
     });
   
     const [formDataValidation, updateFormDataValidation] = useState({
@@ -34,6 +60,7 @@ import Select from 'react-select';
       role:""
     });
 
+
     const handleChange = (e) => {
       updateFormData({
         ...formData,
@@ -45,7 +72,7 @@ import Select from 'react-select';
 
     function handleSelectChange(event) {
       setSelectedClient(event.target.value);
-      console.log(selectedRole)
+      console.log('asdasd')
     }
 
     const handleSubmit = (e) => {
@@ -62,7 +89,7 @@ import Select from 'react-select';
         console.log(formData);
       }
     };
-  
+  console.log(selectedRole)
     return ( 
   <>
             {/* Add User Modal */}
@@ -235,85 +262,169 @@ import Select from 'react-select';
                               <tr>
                                 <td>Employee</td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox"  
+                                  name="employee_read"
+                                  onChange={handleChange}
+                                  checked={formData.employee_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox"  name="employee_write"
+                                  onChange={handleChange}
+                                  checked={formData.employee_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="employee_create"
+                                   onChange={handleChange}
+                                   checked={formData.employee_create}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="employee_delete"
+                                   onChange={handleChange}
+                                   checked={formData.employee_delete}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="employee_import"
+                                    onChange={handleChange}
+                                    checked={formData.employee_import}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="employee_export"
+                                    onChange={handleChange}
+                                    checked={formData.employee_export}
+                                  />
                                 </td>
                               </tr>
                               <tr>
                                 <td>Holidays</td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox"  
+                                  name="holiday_read"
+                                  onChange={handleChange}
+                                  checked={formData.holiday_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox"  name="holiday_write"
+                                  onChange={handleChange}
+                                  checked={formData.holiday_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="holiday_create"
+                                   onChange={handleChange}
+                                   checked={formData.holiday_create}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="holiday_delete"
+                                   onChange={handleChange}
+                                   checked={formData.holiday_delete}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="holiday_import"
+                                    onChange={handleChange}
+                                    checked={formData.holiday_import}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="holiday_export"
+                                    onChange={handleChange}
+                                    checked={formData.holiday_export}
+                                  />
                                 </td>
                               </tr>
                               <tr>
                                 <td>Leaves</td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox"  
+                                  name="leave_read"
+                                  onChange={handleChange}
+                                  checked={formData.leave_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox"  name="leave_write"
+                                  onChange={handleChange}
+                                  checked={formData.leave_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="leave_create"
+                                   onChange={handleChange}
+                                   checked={formData.leave_create}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="leave_delete"
+                                   onChange={handleChange}
+                                   checked={formData.leave_delete}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="leave_import"
+                                    onChange={handleChange}
+                                    checked={formData.leave_import}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="leave_export"
+                                    onChange={handleChange}
+                                    checked={formData.leave_export}
+                                  />
                                 </td>
                               </tr>
                               <tr>
                                 <td>Events</td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox"  
+                                  name="event_read"
+                                  onChange={handleChange}
+                                  checked={formData.event_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox"  name="event_write"
+                                  onChange={handleChange}
+                                  checked={formData.event_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="event_create"
+                                   onChange={handleChange}
+                                   checked={formData.event_create}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                   name="event_delete"
+                                   onChange={handleChange}
+                                   checked={formData.event_delete}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="event_import"
+                                    onChange={handleChange}
+                                    checked={formData.event_import}
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" />
+                                  <input  type="checkbox" 
+                                    name="event_export"
+                                    onChange={handleChange}
+                                    checked={formData.event_export}
+                                  />
                                 </td>
                               </tr>
                             </tbody>
