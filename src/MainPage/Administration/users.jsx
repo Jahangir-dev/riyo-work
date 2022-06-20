@@ -5,6 +5,8 @@
 import React, { useState,useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import jwt from "../../auth/useJwt";
 import { Avatar_01, Avatar_02, Avatar_03, Avatar_04, Avatar_05,Avatar_06,Avatar_07,
         Avatar_08,Avatar_09,Avatar_10,Avatar_11,Avatar_12 } from '../../Entryfile/imagepath';
 
@@ -17,36 +19,47 @@ import  Adduser from "../../_components/modelbox/Adduser"
 const Users = () => {
 
   const [data, setData] = useState([
-    {id:1,name:"Bernardo Galaviz",image:Avatar_01,email:"bernardogalaviz@example.com",company:"Global Technologies",created_date:"5 Jan 2019",role:"Client"},
-    {id:2,name:"Catherine Manseau",image:Avatar_02,email:"catherinemanseau@example.com",company:"Dreamguy's Technologies",created_date:"5 Jan 2019",role:"Admin"},
-    {id:3,name:"Jeffery Lalor",image:Avatar_03,email:"jefferrylalorr@example.com",company:"Dreamguy's Technologies",created_date:"5 Jan 2019",role:"Employee"},
-    {id:4,name:"Jeffrey Warden",image:Avatar_04,email:"jeffreywarden@example.com",company:"Global Technologies",created_date:"5 Jan 2019",role:"Client"},
-    {id:5,name:"John Due",image:Avatar_05,email:"johndue@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
-    {id:6,name:"John Smith",image:Avatar_06,email:"johnsmith@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
-    {id:7,name:"Lesley Grauer",image:Avatar_07,email:"lesleygrauer@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
-    {id:8,name:"Loren Gatlin",image:Avatar_08,email:"lorengatlin@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
-    {id:9,name:"Mike Litorus",image:Avatar_09,email:"mikelitorus@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
-    {id:10,name:"Richard Miles",image:Avatar_10,email:"richardmiles@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
-    {id:11,name:"Tarah Shropshire",image:Avatar_11,email:"tarahshropshire@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
-    {id:12,name:"Wilmer Deluna",image:Avatar_12,email:"wilmerdeluna@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
+    // {id:1,name:"Bernardo Galaviz",image:Avatar_01,email:"bernardogalaviz@example.com",company:"Global Technologies",created_date:"5 Jan 2019",role:"Client"},
+    // {id:2,name:"Catherine Manseau",image:Avatar_02,email:"catherinemanseau@example.com",company:"Dreamguy's Technologies",created_date:"5 Jan 2019",role:"Admin"},
+    // {id:3,name:"Jeffery Lalor",image:Avatar_03,email:"jefferrylalorr@example.com",company:"Dreamguy's Technologies",created_date:"5 Jan 2019",role:"Employee"},
+    // {id:4,name:"Jeffrey Warden",image:Avatar_04,email:"jeffreywarden@example.com",company:"Global Technologies",created_date:"5 Jan 2019",role:"Client"},
+    // {id:5,name:"John Due",image:Avatar_05,email:"johndue@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
+    // {id:6,name:"John Smith",image:Avatar_06,email:"johnsmith@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
+    // {id:7,name:"Lesley Grauer",image:Avatar_07,email:"lesleygrauer@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
+    // {id:8,name:"Loren Gatlin",image:Avatar_08,email:"lorengatlin@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
+    // {id:9,name:"Mike Litorus",image:Avatar_09,email:"mikelitorus@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
+    // {id:10,name:"Richard Miles",image:Avatar_10,email:"richardmiles@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
+    // {id:11,name:"Tarah Shropshire",image:Avatar_11,email:"tarahshropshire@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
+    // {id:12,name:"Wilmer Deluna",image:Avatar_12,email:"wilmerdeluna@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
   ]);
   useEffect( ()=>{
+    jwt
+    .get('/users')
+    .then((res) => {
+      setData(res.data);
+    })
+    .catch((err) =>{ console.log(err);
+      setIsLoading(false)
+      setError("general", {
+           message: err.response.data.message,
+         });
+      });
     if($('.select').length > 0) {
       $('.select').select2({
         minimumResultsForSearch: -1,
         width: '100%'
       });
     }
-  });  
+  },[]);  
 
     const columns = [
       
       {
         title: 'Name',
-        dataIndex: 'name',
+        dataIndex: 'username',
         render: (text, record) => (            
             <h2 className="table-avatar">
-              <Link to="/app/profile/employee-profile" className="avatar"><img alt="" src={record.image} /></Link>
+              <Link to="/app/profile/employee-profile" className="avatar"><img alt="" src={Avatar_01}/></Link>
               <Link to="/app/profile/employee-profile">{text} <span>{record.role}</span></Link>
             </h2>
           ), 
@@ -60,8 +73,9 @@ const Users = () => {
 
       {
         title: 'Company',
-        dataIndex: 'company', 
-        sorter: (a, b) => a.company.length - b.company.length,
+        dataIndex: 'company_name', 
+      
+        sorter: (a, b) => a.company_name.length - b.company_name.length,
       },
     
       {
@@ -73,7 +87,7 @@ const Users = () => {
         title: 'Role',
         dataIndex: 'role',
         render: (text, record) => (
-            <span className={text ==="Admin" ? "badge bg-inverse-danger" :  "badge bg-inverse-success" }
+            <span className={text ==="admin" ? "badge bg-inverse-danger" :  "badge bg-inverse-success" }
            >{text}</span>
           ),
         sorter: (a, b) => a.role.length - b.role.length,
@@ -91,10 +105,12 @@ const Users = () => {
           ),
       },
     ]
+
+    
       return ( 
             <div className="page-wrapper">
               <Helmet>
-                 <title>Users - HRMS Admin Template</title>
+                 <title>Users - Riyo Admin Template</title>
                  <meta name="description" content="Login page"/>					
               </Helmet>
               {/* Page Content */}
