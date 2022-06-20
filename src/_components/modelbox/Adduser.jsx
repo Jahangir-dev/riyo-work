@@ -1,5 +1,6 @@
   
 import React, { useState, useEffect,useRef  } from "react";
+import jwt from "../../auth/useJwt";
 import SimpleReactValidator from "simple-react-validator";
 import Select from 'react-select';
 
@@ -17,14 +18,14 @@ import Select from 'react-select';
       employee_id:"",
       user_name:"",
       email:"",
-      phone_number:"",
+      phone:"",
       role:"",
-      employee_read : "",
-      employee_write:"",
-      employee_create: "",
-      employee_delete:"",
-      employee_import:"",
-      employee_export:"",
+      emp_read : "",
+      emp_write:"",
+      emp_create: "",
+      emp_delete:"",
+      emp_import:"",
+      emp_export:"",
 
       holiday_read : "",
       holiday_write:"",
@@ -56,7 +57,7 @@ import Select from 'react-select';
       employee_id:"",
       user_name:"",
       email:"",
-      phone_number:"",
+      phone:"",
       role:""
     });
 
@@ -81,11 +82,11 @@ import Select from 'react-select';
         simpleValidator.current.showMessages(true);
         forceUpdate(1)
       } else {
-        // jwt.post('/addSettings',formData).then((res) => {
+        jwt.post('/addUser',formData).then((res) => {
           
-        // }).catch((err) =>{ console.log(err);
+        }).catch((err) =>{ console.log(err);
           
-        // });
+        });
         console.log(formData);
       }
     };
@@ -198,15 +199,15 @@ import Select from 'react-select';
                             <div className="form-group">
                               <label>Phone </label>
                               <input className="form-control" type="text" 
-                              name="phone_number"
+                              name="phone"
                               onChange={handleChange}
-                              value={formData.phone_number}
+                              value={formData.phone}
                               onBlur={() => {
-                                simpleValidator.current.showMessageFor("phone_number")
+                                simpleValidator.current.showMessageFor("phone")
                                 forceUpdate(1);
                               }}
                               />
-                              {simpleValidator.current.message("phone_number", formData.phone_number, "required")}
+                              {simpleValidator.current.message("phone", formData.phone, "required")}
                             </div>
                           </div>
                           <div className="col-sm-6">
@@ -263,41 +264,41 @@ import Select from 'react-select';
                                 <td>Employee</td>
                                 <td className="text-center">
                                   <input  type="checkbox"  
-                                  name="employee_read"
+                                  name="emp_read"
                                   onChange={handleChange}
-                                  checked={formData.employee_read} />
+                                  checked={formData.emp_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  name="employee_write"
+                                  <input  type="checkbox"  name="emp_write"
                                   onChange={handleChange}
-                                  checked={formData.employee_write} />
+                                  checked={formData.emp_write} />
                                 </td>
                                 <td className="text-center">
                                   <input  type="checkbox" 
-                                   name="employee_create"
+                                   name="emp_create"
                                    onChange={handleChange}
-                                   checked={formData.employee_create}
+                                   checked={formData.emp_create}
                                   />
                                 </td>
                                 <td className="text-center">
                                   <input  type="checkbox" 
-                                   name="employee_delete"
+                                   name="emp_delete"
                                    onChange={handleChange}
-                                   checked={formData.employee_delete}
+                                   checked={formData.emp_delete}
                                   />
                                 </td>
                                 <td className="text-center">
                                   <input  type="checkbox" 
-                                    name="employee_import"
+                                    name="emp_import"
                                     onChange={handleChange}
-                                    checked={formData.employee_import}
+                                    checked={formData.emp_import}
                                   />
                                 </td>
                                 <td className="text-center">
                                   <input  type="checkbox" 
-                                    name="employee_export"
+                                    name="emp_export"
                                     onChange={handleChange}
-                                    checked={formData.employee_export}
+                                    checked={formData.emp_export}
                                   />
                                 </td>
                               </tr>
