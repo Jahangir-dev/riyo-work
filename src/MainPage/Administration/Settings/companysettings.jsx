@@ -2,34 +2,54 @@
  * Signin Firebase
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef  } from "react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import Select from 'react-select';
 import jwt from "../../../auth/useJwt";
 import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import SimpleReactValidator from "simple-react-validator";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
 
 //import jwt from "../auth/useJwt";
 
-const schema = yup.object({
-  company_name: yup
-    .string()
-    .required("Company name is required")
-    .trim(),
-  //password: yup.string().max(10).required("Password is required").trim(),
-});
-
 const Settings = () => {
+  const simpleValidator = useRef(new SimpleReactValidator());
+  const [, forceUpdate] = useState();
+  const form = React.createRef();
+  const initialFormData = Object.freeze({});
+  const [formData, updateFormData] = useState({
+    company_name: "",
+    conact_person:"",
+    address:"",
+    country:"",
+    state_id:"",
+    city:"",
+    postal_code:"",
+    email:"",
+    phone_number:"",
+    mobile_number:"",
+    fax:"",
+    website_url:""
 
-  const {
-    handleSubmit,
-    control,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm({resolver: yupResolver(schema)},);
+  });
+
+  const [formDataValidation, updateFormDataValidation] = useState({
+    company_name: "",
+    conact_person:"",
+    address:"",
+    country:"",
+    state_id:"",
+    city:"",
+    postal_code:"",
+    email:"",
+    phone_number:"",
+    mobile_number:"",
+    fax:"",
+    website_url:""
+
+  });
 
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
@@ -39,40 +59,33 @@ const Settings = () => {
   const [city, setCity] = useState('');
 
   useEffect(() => {
-    // if ($(".select").length > 0) {
-    //   $(".select").select2({
-    //     minimumResultsForSearch: -1,
-    //     width: "100%",
-    //   });
-    // }
-    
-    jwt
-    .get('/getSettings')
-    .then((res) => {
-      // Toast('Settings saved')
-    })
-    .catch((err) =>{ console.log(err);
-      setIsLoading(false)
-      setError("general", {
-           message: err.response.data.message,
-         });
-        });
-    
     axios.get("/countries").then((res) => {
       setCountries(res.data.data);
     });
   }, []);
 
+  
+
   function getState(val) {
+    setCountry(val.value)
+    formData.country = val.value;
     axios.get("/states/"+val.value).then((res) => {
       setStates(res.data.data);
     });
   }
 
   function getCities(event) {
+    setState(event.value)
+    formData.state_id = event.value;
     axios.get("/cities/"+event.value).then((res) => {
       setCities(res.data.data);
     });
+  }
+
+  function changeCity(event)
+  {
+    setCity(event.value)
+    formData.city = event.value;
   }
 
   const options = countries.map(({ code, name }, index) => {
@@ -99,22 +112,24 @@ const Settings = () => {
     }
   })
 
-  const onSubmit = (data) => {
-    jwt
-    .post('/addSettings',{ ...data })
-    .then((res) => {
-  
-      clearErrors("general");
-      // Toast('Settings saved')
-     
-    })
-    .catch((err) =>{ console.log(err);
-      setIsLoading(false)
-      setError("general", {
-           message: err.response.data.message,
-         });
-        });
-  }
+  const handleChange = (e) => {
+    updateFormData({
+      ...formData,
+
+      // Trimming any whitespace
+      [e.target.name]: e.target.value.trim()
+    });
+  };
+
+  const handleSubmit = (e) => {
+    const formValid = simpleValidator.current.allValid();
+    if (!formValid) {
+      simpleValidator.current.showMessages(true);
+      forceUpdate(1)
+    } else {
+      console.log(formData);
+    }
+  };
 
   return (
     <div className="page-wrapper">
@@ -135,46 +150,35 @@ const Settings = () => {
               </div>
             </div>
             {/* /Page Header */}
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form ref={form}> 
               <div className="row">
                 <div className="col-sm-6">
                   <div className="form-group">
                     <label>
                       Company Name <span className="text-danger">*</span>
                     </label>
-                    <Controller
-                    name="company_name"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
-                      <input
-                        className={`form-control  ${
-                          errors?.company_name ? "error-input" : ""
-                        }`}
-                        type="text"
-                        value={value}
-                        onChange={onChange}
-                        autoComplete="false"
-                      />
-                    )}
+                    <input
+                      name="company_name"
+                      className="form-control"
+                      type="text"
+                      onChange={handleChange}
+
+                      onBlur={() => {
+                        simpleValidator.current.showMessageFor("company_name")
+                        forceUpdate(1);
+                      }}
                     />
-                     <small>{errors?.company_name?.message}</small>
+                    {simpleValidator.current.message("company_name", formData.company_name, "required")}
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="form-group">
                     <label>Contact Person</label>
-                    <Controller
-                    name="conact_person"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
                     <input
                       name="conact_person"
                       className="form-control "
-                      value={value}
-                      onChange={onChange}
                       type="text"
-                    />
-                    )}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -186,15 +190,18 @@ const Settings = () => {
                     <input
                       name="address"
                       className="form-control "
-                      defaultValue=""
+                      onChange={handleChange}
                       type="text"
+
                     />
                   </div>
                 </div>
                 <div className="col-sm-6 col-md-6 col-lg-3">
                   <div className="form-group">
                     <label>Country</label>
-                    <Select name="countries" className="select" onChange={getState} options={options} value={country}>
+                    <Select name="countries" className="select" onChange={getState} options={options} value={options.filter(function(option) {
+                            return option.value === country;
+                    })}>
                      
                     </Select>
                   </div>
@@ -202,7 +209,9 @@ const Settings = () => {
                 <div className="col-sm-6 col-md-6 col-lg-3">
                   <div className="form-group">
                     <label>State/Province</label>
-                    <Select name="states" id="select-1" className="select" onChange={getCities} options={options1} value={state}>
+                    <Select name="states" id="select-1" className="select" onChange={getCities} options={options1} value={options1.filter(function(option) {
+                            return option.value === state;
+                    })}>
                       
                     </Select>
                   </div>
@@ -210,27 +219,21 @@ const Settings = () => {
                 <div className="col-sm-6 col-md-6 col-lg-3">
                   <div className="form-group">
                     <label>City</label>
-                    <Select name="city" className="select" options={options2} value={city}>
+                    <Select name="city" className="select" onChange={changeCity} options={options2}  value={options2.filter(function(option) {
+                            return option.value === city;
+                    })}>
                       
                     </Select>
-                    
                   </div>
                 </div>
                 <div className="col-sm-6 col-md-6 col-lg-3">
                   <div className="form-group">
                     <label>Postal Code</label>
-                    <Controller
-                    name="post_code"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
                     <input
-                      name="post_code"
-                      className="form-control "
-                      value={value}
-                      onChange={onChange}
+                      name="postal_code"
+                      className="form-control"
+                      onChange={handleChange}
                       type="text"
-                    />
-                    )}
                     />
                   </div>
                 </div>
@@ -239,36 +242,28 @@ const Settings = () => {
                 <div className="col-sm-6">
                   <div className="form-group">
                     <label>Email</label>
-                    <Controller
-                    name="email"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
                     <input
                       name="email"
-                      className="form-control "
-                      value={value}
-                      onChange={onChange}
+                      className="form-control"
+                      onChange={handleChange}
+                      value={formData.email}
+                      onBlur={() => {
+                        simpleValidator.current.showMessageFor("email")
+                        forceUpdate(1);
+                      }}
                       type="email"
                     />
-                    )}
-                    />
+                    {simpleValidator.current.message("email", formData.email, "required|email")}
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="form-group">
                     <label>Phone Number</label>
-                    <Controller
-                    name="phone_number"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
                     <input
                       name="phone_number"
-                      className="form-control "
-                      value={value}
-                      onChange={onChange}
+                      className="form-control"
+                      onChange={handleChange}
                       type="text"
-                    />
-                    )}
                     />
                   </div>
                 </div>
@@ -277,18 +272,11 @@ const Settings = () => {
                 <div className="col-sm-6">
                   <div className="form-group">
                     <label>Mobile Number</label>
-                    <Controller
-                    name="mobile_number"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
                     <input
                       name="mobile_number"
-                      className="form-control "
-                      value={value}
-                      onChange={onChange}
+                      className="form-control"
+                      onChange={handleChange}
                       type="text"
-                    />
-                    )}
                     />
                   </div>
                 </div>
@@ -298,7 +286,7 @@ const Settings = () => {
                     <input
                       name="fax"
                       className="form-control"
-                      defaultValue="818-978-7102"
+                      onChange={handleChange}
                       type="text"
                     />
                   </div>
@@ -308,24 +296,17 @@ const Settings = () => {
                 <div className="col-sm-12">
                   <div className="form-group">
                     <label>Website Url</label>
-                    <Controller
-                    name="website"
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
                     <input
-                      name="website"
-                      className="form-control "
-                      value={value}
-                      onChange={onChange}
+                      className="form-control"
+                      name="website_url"
+                      onChange={handleChange}
                       type="url"
-                    />
-                    )}
                     />
                   </div>
                 </div>
               </div>
               <div className="submit-section">
-                <button className="btn btn-primary submit-btn">Save</button>
+                <button onClick={handleSubmit} type="button" className="btn btn-primary submit-btn">Save</button>
               </div>
             </form>
           </div>
