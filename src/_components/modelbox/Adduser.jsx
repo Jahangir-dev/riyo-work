@@ -3,6 +3,8 @@ import React, { useState, useEffect,useRef  } from "react";
 import jwt from "../../auth/useJwt";
 import SimpleReactValidator from "simple-react-validator";
 import Select from 'react-select';
+import $ from "jquery";
+
 
   const Adduser = () => {
     const simpleValidator = useRef(new SimpleReactValidator());
@@ -26,33 +28,33 @@ import Select from 'react-select';
       phone:"",
       role:"",
       company_id:"",
-      emp_read : "",
-      emp_write:"",
-      emp_create: "",
-      emp_delete:"",
-      emp_import:"",
-      emp_export:"",
+      emp_read : false,
+      emp_write:false,
+      emp_create: false,
+      emp_delete:false,
+      emp_import:false,
+      emp_export:false,
 
-      holiday_read : "",
-      holiday_write:"",
-      holiday_create: "",
-      holiday_delete:"",
-      holiday_import:"",
-      holiday_export:"",
+      holiday_read : false,
+      holiday_write:false,
+      holiday_create: false,
+      holiday_delete:false,
+      holiday_import:false,
+      holiday_export:false,
 
-      leave_read : "",
-      leave_write:"",
-      leave_create: "",
-      leave_delete:"",
-      leave_import:"",
-      leave_export:"",
+      leave_read : false,
+      leave_write:false,
+      leave_create: false,
+      leave_delete:false,
+      leave_import:false,
+      leave_export:false,
 
-      event_read : "",
-      event_write:"",
-      event_create: "",
-      event_delete:"",
-      event_import:"",
-      event_export:""
+      event_read : false,
+      event_write:false,
+      event_create: false,
+      event_delete:false,
+      event_import:false,
+      event_export:false
     });
   
     const [formDataValidation, updateFormDataValidation] = useState({
@@ -76,11 +78,11 @@ import Select from 'react-select';
     },[]);
     const handleChange = (e) => {
       updateFormData({
-        ...formData,
-  
-        // Trimming any whitespace
-        [e.target.name]: e.target.value.trim()
-      });
+          ...formData,
+            
+          // Trimming any whitespace
+          [e.target.name]: e.target.value.trim()
+        });
     };
 
     function handleSelectChange(event) {
@@ -89,21 +91,31 @@ import Select from 'react-select';
     }
 
     const handleSubmit = (e) => {
+      
       const formValid = simpleValidator.current.allValid();
+      console.log(formValid)
       if (!formValid) {
         simpleValidator.current.showMessages(true);
         forceUpdate(1)
       } else {
         formData.role = selectedUserRole
         formData.company_id = selectedUserCompany
-        
+          
         jwt.post('/addUser',formData).then((res) => {
           if(res.errors.email) {
             setUserEmailError(res.errors.email);
+          } else {
+            setUserEmailError('')
           }
           if(res.errors.user_name) {
             setUserNameError(res.errors.user_name);
+          } else {
+            setUserNameError('')
           }
+            if(res.success === "true") {
+              $("#add_user").modal("hide");
+              $(".modal-backdrop").hide();
+            }
         }).catch((err) =>{ console.log(err);
           console.log(err.errors)
         
