@@ -16,6 +16,8 @@ import {itemRender,onShowSizeChange} from "../paginationfunction"
 import "../antdstyle.css"
 import  Adduser from "../../_components/modelbox/Adduser"
 import SimpleReactValidator from "simple-react-validator";
+import Select from 'react-select';
+import { Spinner } from 'reactstrap';
 
 const Users = () => {
   const [edit,  SetEdit] = useState();
@@ -33,12 +35,23 @@ const Users = () => {
     // {id:11,name:"Tarah Shropshire",image:Avatar_11,email:"tarahshropshire@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
     // {id:12,name:"Wilmer Deluna",image:Avatar_12,email:"wilmerdeluna@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
   ]);
-
+  const [roles, setRoles] = useState([{label:'Admin',value:'admin'},{label:'Employee',value:'employee'}])
+  const [companies, setCompanies] = useState([{label:'Global Technologies',value:'1'},{label:'Delta Infotech',value:'2'}])
   const simpleValidator = useRef(new SimpleReactValidator());
+  const [IsLoading, setIsLoading] = useState(true);
+  const [SearchText, setSearchText] = useState();
   const [, forceUpdate] = useState();
-  const [selectedRole, setSelectedClient] = useState('admin');
+  const [selectedRole, setSelectedRole] = useState('admin');
+  const [searchRole, setSearchRole] = useState('admin');
+  const [selectedCompany, setSelectedCompany] = useState('1');
   const form = React.createRef();
   const initialFormData = Object.freeze({});
+  const [searchForm , setSearchForm] = useState({
+    search:"",
+    role: "",
+    company: "",
+
+});
   const [formData, updateFormData] = useState({
     first_name: "",
     last_name:"",
@@ -104,6 +117,7 @@ const Users = () => {
     .get('/users')
     .then((res) => {
       setData(res.data);
+      setIsLoading(false)
     })
     .catch((err) =>{ console.log(err);
       setIsLoading(false)
@@ -111,12 +125,12 @@ const Users = () => {
            message: err.response.data.message,
          });
       });
-    if($('.select').length > 0) {
-      $('.select').select2({
-        minimumResultsForSearch: -1,
-        width: '100%'
-      });
-    }
+    // if($('.select').length > 0) {
+    //   $('.select').select2({
+    //     minimumResultsForSearch: -1,
+    //     width: '100%'
+    //   });
+    // }
   },[]);  
 
   function handleSelectChange(event) {
@@ -137,6 +151,18 @@ const Users = () => {
       console.log(formData);
     }
   };
+  const searchuser = () => {
+    setIsLoading(true)
+    searchForm.role = selectedRole
+    searchForm.company = selectedCompany 
+    searchForm.search = SearchText
+    jwt.post('/search-user',searchForm).then((res) => {
+      setData(res.data);
+      setIsLoading(false)
+      }).catch((err) =>{ console.log(err);
+        setIsLoading(false)
+      });
+  }
     const columns = [
       
       {
@@ -193,7 +219,14 @@ const Users = () => {
 
     
       return ( 
+        
             <div className="page-wrapper">
+              {
+              IsLoading &&
+              <div className="loader">
+              <Spinner color="white" />
+              </div>
+            }
               <Helmet>
                  <title>Users - Riyo Admin Template</title>
                  <meta name="description" content="Login page"/>					
@@ -219,35 +252,32 @@ const Users = () => {
                 {/* Search Filter */}
                 <div className="row filter-row">
                   <div className="col-sm-6 col-md-3">  
-                    <div className="form-group form-focus">
-                      <input type="text" className="form-control floating" />
-                      <label className="focus-label">Name</label>
+                    <div className="form-group ">
+                      <input type="text" value={SearchText} onChange={(e) => setSearchText(e.target.value)} className="form-control floating" placeholder='Search'/>
                     </div>
                   </div>
                   <div className="col-sm-6 col-md-3"> 
-                    <div className="form-group form-focus select-focus">
-                      <select className="select floating"> 
-                        <option>Select Company</option>
-                        <option>Global Technologies</option>
-                        <option>Delta Infotech</option>
-                      </select>
-                      <label className="focus-label">Company</label>
+                    <div className="form-group">
+                    
+                    <Select name="states" id="select-1" className="select" onChange={(e) => setSelectedCompany(e.value)} options={companies} value={companies.filter(function(option) {
+                          return option.value === selectedCompany;
+                      })}>
+                    </Select>
+                      
                     </div>
                   </div>
                   <div className="col-sm-6 col-md-3"> 
-                    <div className="form-group form-focus select-focus">
-                      <select className="select floating"> 
-                        <option>Select Roll</option>
-                        <option>Web Developer</option>
-                        <option>Web Designer</option>
-                        <option>Android Developer</option>
-                        <option>Ios Developer</option>
-                      </select>
-                      <label className="focus-label">Role</label>
+                    <div className="form-group">
+                    <Select name="searchRole" className="select"  onChange={(e) => setSelectedRole(e.value)}  options={roles}  value={roles.filter(function(option) {
+                            return option.value === searchRole;
+                    })}>
+                      
+                    </Select>
+                    
                     </div>
                   </div>
                   <div className="col-sm-6 col-md-3">  
-                    <a href="#" className="btn btn-success btn-block w-100"> Search </a>  
+                    <a onClick={searchuser} className="btn btn-success btn-block w-100"> Search </a>  
                   </div>     
                 </div>
                 {/* /Search Filter */}

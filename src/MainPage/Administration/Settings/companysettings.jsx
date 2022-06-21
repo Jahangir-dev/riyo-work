@@ -4,11 +4,13 @@ import axios from "axios";
 import Select from 'react-select';
 import jwt from "../../../auth/useJwt";
 import SimpleReactValidator from "simple-react-validator";
+import { Spinner } from 'reactstrap';
 
 const Settings = () => {
   const simpleValidator = useRef(new SimpleReactValidator());
   const [, forceUpdate] = useState();
   const form = React.createRef();
+  const [IsLoading, setIsLoading] = useState(true);
   const initialFormData = Object.freeze({});
   const [formData, updateFormData] = useState({
     company_name: "",
@@ -83,6 +85,7 @@ const Settings = () => {
      
      
       forceUpdate(1)
+      setIsLoading(false)
     }).catch((err) =>{ console.log(err);
       
     });
@@ -92,17 +95,21 @@ const Settings = () => {
 
   function getState(val) {
     setCountry(val.value)
+    setIsLoading(true);
     formData.country_id = val.value;
     axios.get("/states/"+val.value).then((res) => {
       setStates(res.data.data);
+      setIsLoading(false);
     });
   }
 
   function getCities(event) {
     setState(event.value)
+    setIsLoading(true);
     formData.state_id = event.value;
     axios.get("/cities/"+event.value).then((res) => {
       setCities(res.data.data);
+      setIsLoading(false);
     });
   }
 
@@ -151,8 +158,9 @@ const Settings = () => {
       simpleValidator.current.showMessages(true);
       forceUpdate(1)
     } else {
+      setIsLoading(true);
       jwt.post('/addSettings',formData).then((res) => {
-        
+        setIsLoading(false);
       }).catch((err) =>{ console.log(err);
         
       });
@@ -163,6 +171,12 @@ const Settings = () => {
   console.log(country+city+state)
   return (
     <div className="page-wrapper">
+      {
+        IsLoading &&
+        <div className="loader">
+        <Spinner color="white" />
+        </div>
+      }
       <Helmet>
         <title>Settings - Riyo Admin</title>
         <meta name="description" content="Login page" />
