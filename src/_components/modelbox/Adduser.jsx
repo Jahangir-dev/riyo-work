@@ -6,8 +6,13 @@ import Select from 'react-select';
 
   const Adduser = () => {
     const simpleValidator = useRef(new SimpleReactValidator());
+    const [userRoles, setUserRoles] = useState([{label:'Admin',value:'admin'},{label:'Employee',value:'employee'},{label:'Client',value:'client'}])
+    const [userCompanies, setUserCompanies] = useState([{label:'Global Technologies',value:'1'},{label:'Delta Infotech',value:'2'}])
     const [, forceUpdate] = useState();
-    const [selectedRole, setSelectedClient] = useState('admin');
+    const [selectedUserRole, setSelectedUserRole] = useState('admin');
+    const [selectedUserCompany, setSelectedUserCompany] = useState('1');
+    const [UserNameError, setUserNameError] = useState();
+    const [UserEmailError, setUserEmailError] = useState();
     const form = React.createRef();
     const initialFormData = Object.freeze({});
     const [formData, updateFormData] = useState({
@@ -20,6 +25,7 @@ import Select from 'react-select';
       email:"",
       phone:"",
       role:"",
+      company_id:"",
       emp_read : "",
       emp_write:"",
       emp_create: "",
@@ -61,7 +67,13 @@ import Select from 'react-select';
       role:""
     });
 
-
+    useEffect( ()=>{
+      jwt.get('/generate-employee_id').then((res) => {
+          formData.employee_id = res.employee_id
+      }).catch((err) =>{ console.log(err);
+        
+      });
+    },[]);
     const handleChange = (e) => {
       updateFormData({
         ...formData,
@@ -82,15 +94,24 @@ import Select from 'react-select';
         simpleValidator.current.showMessages(true);
         forceUpdate(1)
       } else {
+        formData.role = selectedUserRole
+        formData.company_id = selectedUserCompany
+        
         jwt.post('/addUser',formData).then((res) => {
-          
+          if(res.errors.email) {
+            setUserEmailError(res.errors.email);
+          }
+          if(res.errors.user_name) {
+            setUserNameError(res.errors.user_name);
+          }
         }).catch((err) =>{ console.log(err);
-          
+          console.log(err.errors)
+        
         });
         console.log(formData);
       }
     };
-  console.log(selectedRole)
+ 
     return ( 
   <>
             {/* Add User Modal */}
@@ -149,6 +170,7 @@ import Select from 'react-select';
                                }}
                               />
                               {simpleValidator.current.message("user_name", formData.user_name, "required")}
+                              <small className="text-danger">{UserNameError}</small>
                             </div>
                           </div>
                           <div className="col-sm-6">
@@ -164,11 +186,12 @@ import Select from 'react-select';
                               }}
                               />
                               {simpleValidator.current.message("email", formData.email, "required|email")}
+                              <small className="text-danger">{UserEmailError}</small>
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
-                              <label>Password</label>
+                              <label>Password<span className="text-danger">*</span></label>
                               <input className="form-control" type="password"  
                               name="password"
                               onChange={handleChange}
@@ -182,7 +205,7 @@ import Select from 'react-select';
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
-                              <label>Confirm Password</label>
+                              <label>Confirm Password<span className="text-danger">*</span></label>
                               <input className="form-control" type="password"  
                               name="re_password"
                               onChange={handleChange}
@@ -213,21 +236,21 @@ import Select from 'react-select';
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Role</label>
-                              <select className="select" value={selectedRole} onChange={handleSelectChange}
-                              >
-                                <option value='admin'>Admin</option>
-                                <option value='client'>Client</option>
-                                <option value='employee'>Employee</option>
-                              </select>
+                              <Select name="states" id="select-1" className="select" onChange={(e) => setSelectedUserRole(e.value)} options={userRoles} value={userRoles.filter(function(option) {
+                                  return option.value === selectedUserRole;
+                                })}>
+                      
+                              </Select>
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Company</label>
-                              <select className="select">
-                                <option>Global Technologies</option>
-                                <option>Delta Infotech</option>
-                              </select>
+                              <Select name="states" id="select-1" className="select" onChange={(e) => setSelectedUserCompany(e.value)} options={userCompanies} value={userCompanies.filter(function(option) {
+                                  return option.value === selectedUserCompany;
+                                })}>
+                      
+                              </Select>
                             </div>
                           </div>
                           <div className="col-sm-6">  
@@ -235,7 +258,8 @@ import Select from 'react-select';
                               <label>Employee ID <span className="text-danger">*</span></label>
                               <input type="text" className="form-control floating" 
                                name="employee_id"
-                               onChange={handleChange}
+                               disabled
+                               //onChange={handleChange}
                                value={formData.employee_id}
                                onBlur={() => {
                                  simpleValidator.current.showMessageFor("employee_id")

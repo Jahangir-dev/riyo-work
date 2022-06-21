@@ -44,3 +44,25 @@
     font-size: 12px;
     text-align: center;
 }
+
+.css-1s2u09g-control {
+    height: 2.7rem;
+}
+#react-select-2-listbox, #react-select-3-listbox {
+    z-index: 999999;
+}
+
+.loader {
+    height: 100vh;
+    width: 100%;
+    background: rgba(0,0,0,0.5);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+  }
+  .loader .spinner-border {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+  }
