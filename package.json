@@ -1,7 +1,7 @@
 {
   "name": "smarthrreact",
   "version": "0.1.0",
-  "homepage": "",
+  "homepage": "/login",
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --mode development --inline --progress",
@@ -75,7 +75,6 @@
     "react-sticky": "^6.0.3",
     "react-sticky-box": "^0.9.3",
     "react-summernote": "^2.0.2",
-    "react-toastify": "^9.0.3",
     "reactstrap": "^8.5.1",
     "recharts": "^1.8.5",
     "redux-logger": "^4.0.0",

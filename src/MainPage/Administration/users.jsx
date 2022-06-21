@@ -11,6 +11,7 @@ import { Avatar_01, Avatar_02, Avatar_03, Avatar_04, Avatar_05,Avatar_06,Avatar_
         Avatar_08,Avatar_09,Avatar_10,Avatar_11,Avatar_12 } from '../../Entryfile/imagepath';
 
 import { Table } from 'antd';
+import $ from "jquery";
 import 'antd/dist/antd.css';
 import {itemRender,onShowSizeChange} from "../paginationfunction"
 import "../antdstyle.css"
@@ -21,6 +22,7 @@ import { Spinner } from 'reactstrap';
 
 const Users = () => {
   const [edit,  SetEdit] = useState();
+  const [delete_record,  SetDelete] = useState();
   const [data, setData] = useState([
     // {id:1,name:"Bernardo Galaviz",image:Avatar_01,email:"bernardogalaviz@example.com",company:"Global Technologies",created_date:"5 Jan 2019",role:"Client"},
     // {id:2,name:"Catherine Manseau",image:Avatar_02,email:"catherinemanseau@example.com",company:"Dreamguy's Technologies",created_date:"5 Jan 2019",role:"Admin"},
@@ -113,18 +115,7 @@ const Users = () => {
   };
 
   useEffect( ()=>{
-    jwt
-    .get('/users')
-    .then((res) => {
-      setData(res.data);
-      setIsLoading(false)
-    })
-    .catch((err) =>{ console.log(err);
-      setIsLoading(false)
-      setError("general", {
-           message: err.response.data.message,
-         });
-      });
+    getUsers()
     // if($('.select').length > 0) {
     //   $('.select').select2({
     //     minimumResultsForSearch: -1,
@@ -150,6 +141,34 @@ const Users = () => {
       // });
       console.log(formData);
     }
+  };
+  const getUsers = (e) => {
+     jwt
+    .get('/users')
+    .then((res) => {
+      setData(res.data);
+      setIsLoading(false)
+    })
+    .catch((err) =>{ console.log(err);
+      setIsLoading(false)
+      setError("general", {
+           message: err.response.data.message,
+         });
+    });
+  }
+  const handleDelete = (e) => {
+   
+    jwt.get('/deleteUser/'+delete_record.id).then((res) => {
+      if(res.success == true) {
+        getUsers();
+        $("#delete_user").modal("hide");
+        $(".modal-backdrop").hide();
+        
+      }
+    }).catch((err) =>{ console.log(err);
+        
+    });
+   
   };
   const searchuser = () => {
     setIsLoading(true)
@@ -210,7 +229,7 @@ const Users = () => {
               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
               <div className="dropdown-menu dropdown-menu-right">
                 <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_user" onClick={() => SetEdit(record)}><i className="fa fa-pencil m-r-5" /> Edit</a>
-                <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_user"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_user" onClick={() => SetDelete(record)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
               </div>
             </div>
           ),
@@ -664,10 +683,10 @@ const Users = () => {
                       <div className="modal-btn delete-action">
                         <div className="row">
                           <div className="col-6">
-                            <a href="" className="btn btn-primary continue-btn">Delete</a>
+                            <a onClick={handleDelete} className="btn btn-primary continue-btn">Delete</a>
                           </div>
                           <div className="col-6">
-                            <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
+                            <a data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
                           </div>
                         </div>
                       </div>
