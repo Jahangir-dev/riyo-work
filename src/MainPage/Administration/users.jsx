@@ -18,7 +18,7 @@ import "../antdstyle.css"
 import  Adduser from "../../_components/modelbox/Adduser"
 import SimpleReactValidator from "simple-react-validator";
 import Select from 'react-select';
-import { Spinner, Alert  } from 'reactstrap';
+import { Spinner, Alert, Input  } from 'reactstrap';
 import { faLaptopHouse, faLessThanEqual } from '@fortawesome/free-solid-svg-icons';
 
 const Users = () => {
@@ -39,7 +39,7 @@ const Users = () => {
     // {id:12,name:"Wilmer Deluna",image:Avatar_12,email:"wilmerdeluna@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
   ]);
   const [userRoles, setUserRoles] = useState([{label:'Admin',value:'admin'},{label:'Employee',value:'employee'},{label:'Client',value:'client'}])
-  const [userCompanies, setUserCompanies] = useState([{label:'Global Technologies',value:'1'},{label:'Delta Infotech',value:'2'}])
+  const [userCompanies, setUserCompanies] = useState([{label:'Global Technologies',value:1},{label:'Delta Infotech',value:2}])
   const simpleValidator = useRef(new SimpleReactValidator());
   const [IsLoading, setIsLoading] = useState(true);
   const [SearchText, setSearchText] = useState();
@@ -47,10 +47,12 @@ const Users = () => {
   const [UserSuccess, setUserSuccess] = useState();
   const [message , setMessage] = useState(false);
   const [selectedUserRole, setSelectedUserRole] = useState('admin');
-  const [selectedUserCompany, setSelectedUserCompany] = useState('1');
+  const [selectedUserCompany, setSelectedUserCompany] = useState(1);
   const [selectedRole, setSelectedRole] = useState('admin');
   const [searchRole, setSearchRole] = useState('admin');
-  const [selectedCompany, setSelectedCompany] = useState('1');
+  const [selectedCompany, setSelectedCompany] = useState(1);
+  const [UserNameError, setUserNameError] = useState();
+  const [UserEmailError, setUserEmailError] = useState();
   const form = React.createRef();
   const initialFormData = Object.freeze({});
   const [searchForm , setSearchForm] = useState({
@@ -69,34 +71,35 @@ const Users = () => {
     user_name:"",
     email:"",
     phone_number:"",
+    company_id:null,
     role:"",
-    employee_read : null,
-    employee_write:null,
-    employee_create: null,
-    employee_delete:null,
-    employee_import:null,
-    employee_export:null,
+    employee_read : "",
+    employee_write:"",
+    employee_create: "",
+    employee_delete:"",
+    employee_import:"",
+    employee_export:"",
 
-    holiday_read : null,
-    holiday_write:null,
-    holiday_create: null,
-    holiday_delete:null,
-    holiday_import:null,
-    holiday_export:null,
+    holiday_read : "",
+    holiday_write:"",
+    holiday_create: "",
+    holiday_delete:"",
+    holiday_import:"",
+    holiday_export:"",
 
-    leave_read : null,
-    leave_write:null,
-    leave_create: null,
-    leave_delete:null,
-    leave_import:null,
-    leave_export:null,
+    leave_read : "",
+    leave_write:"",
+    leave_create: "",
+    leave_delete:"",
+    leave_import:"",
+    leave_export:"",
 
-    event_read : null,
-    event_write:null,
-    event_create: null,
-    event_delete:null,
-    event_import:null,
-    event_export:null
+    event_read : "",
+    event_write:"",
+    event_create: "",
+    event_delete:"",
+    event_import:"",
+    event_export:""
   });
 
   const [formDataValidation, updateFormDataValidation] = useState({
@@ -112,12 +115,23 @@ const Users = () => {
   });
 
   const handleChange = (e) => {
-    updateFormData({
-      ...formData,
+    if(e.target.type === "checkbox")
+    {
+      updateFormData({
+        ...formData,
 
-      // Trimming any whitespace
-      [e.target.name]: e.target.value.trim()
-    });
+        // Trimming any whitespace
+        [e.target.name]: e.target.checked
+      });
+
+    } else {
+      updateFormData({
+        ...formData,
+
+        // Trimming any whitespace
+        [e.target.name]: e.target.value.trim()
+      });
+    }
   };
 
   useEffect( ()=>{
@@ -142,8 +156,8 @@ const Users = () => {
       ['employee_delete']: e.permissions.emp_delete,
       ['employee_export']: e.permissions.emp_export,
       ['employee_import']: e.permissions.emp_import,
-      ['employee_read: ']:e.permissions.emp_read,
-      ['employee_write:'] :e.permissions.emp_write,
+      ['employee_read']: e.permissions.emp_read,
+      ['employee_write'] : e.permissions.emp_write,
       ['event_create']: e.permissions.event_create,
       ['event_delete']: e.permissions.event_delete,
       ['event_export']: e.permissions.event_export,
@@ -155,7 +169,7 @@ const Users = () => {
       ['holiday_export']: e.permissions.holiday_export,
       ['holiday_import']: e.permissions.holiday_import,
       ['holiday_read']:   e.permissions.holiday_read,
-      ['holiday_write']: e.permissions.holiday_wite,
+      ['holiday_write']: e.permissions.holiday_write,
       ['leave_create']: e.permissions.leave_create,
       ['leave_delete']: e.permissions.leave_delete,
       ['leave_export']: e.permissions.leave_export,
@@ -164,6 +178,7 @@ const Users = () => {
       ['leave_write']: e.permissions.leave_write
 
     });
+    forceUpdate(1)
   }
 
   const handleSubmit = (e) => {
@@ -172,15 +187,35 @@ const Users = () => {
       simpleValidator.current.showMessages(true);
       forceUpdate(1)
     } else {
-      // jwt.post('/addSettings',formData).then((res) => {
+      formData.role = selectedUserRole
+        formData.company_id = selectedUserCompany
+       jwt.post('/updateUser/'+formData.id,formData).then((res) => {
+        if(res.errors) {
+          if(res.errors.email) {
+            setUserEmailError(res.errors.email);
+          } else {
+            setUserEmailError('')
+          }
+          if(res.errors.user_name) {
+            setUserNameError(res.errors.user_name);
+          } else {
+            setUserNameError('')
+          }
+        }
+        if(res.success === true) {
+          document.getElementById("close_user_edit").click();
+          setUserSuccess("User updated successfully")
+          setMessage(true)
+          getUsers()
+        }
+      }).catch((err) =>{ console.log(err);
         
-      // }).catch((err) =>{ console.log(err);
-        
-      // });
+      });
       console.log(formData);
     }
   };
   const getUsers = (e) => {
+    setIsLoading(true)
      jwt
     .get('/users')
     .then((res) => {
@@ -224,6 +259,7 @@ const Users = () => {
   const sendDataToParent = (index) => { // the callback. Use a better name
     setUserSuccess(index);
     setMessage(true)
+    getUsers()
   };
 
     const columns = [
@@ -380,7 +416,7 @@ const Users = () => {
                   <div className="modal-content">
                     <div className="modal-header">
                       <h5 className="modal-title">Edit User</h5>
-                      <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
+                      <button type="button" className="close" id="close_user_edit" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>
                     </div>
@@ -430,6 +466,7 @@ const Users = () => {
                                }}
                               />
                               {simpleValidator.current.message("user_name", formData.user_name, "required")}
+                              <small className="text-danger">{UserNameError}</small>
                             </div>
                           </div>
                           <div className="col-sm-6">
@@ -445,6 +482,7 @@ const Users = () => {
                               }}
                               />
                               {simpleValidator.current.message("email", formData.email, "required|email")}
+                              <small className="text-danger">{UserEmailError}</small>
                             </div>
                           </div>
                           <div className="col-sm-6">
@@ -528,6 +566,7 @@ const Users = () => {
                             </div>
                           </div>
                         </div>
+                        
                         <div className="table-responsive m-t-15">
                           <table className="table table-striped custom-table">
                             <thead>
@@ -545,39 +584,41 @@ const Users = () => {
                               <tr>
                                 <td>Employee</td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  
+                                  <Input  type="checkbox"  
                                   name="employee_read"
                                   onChange={handleChange}
-                                  checked={formData.employee_read} />
+                                  checked={formData.employee_read} 
+                                  />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  name="employee_write"
+                                  <Input  type="checkbox"  name="employee_write"
                                   onChange={handleChange}
+                                  defaultChecked = {formData.employee_write}
                                   checked={formData.employee_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="employee_create"
                                    onChange={handleChange}
                                    checked={formData.employee_create}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="employee_delete"
                                    onChange={handleChange}
                                    checked={formData.employee_delete}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="employee_import"
                                     onChange={handleChange}
                                     checked={formData.employee_import}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="employee_export"
                                     onChange={handleChange}
                                     checked={formData.employee_export}
@@ -587,39 +628,39 @@ const Users = () => {
                               <tr>
                                 <td>Holidays</td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  
+                                  <Input  type="checkbox"  
                                   name="holiday_read"
                                   onChange={handleChange}
                                   checked={formData.holiday_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  name="holiday_write"
+                                  <Input  type="checkbox"  name="holiday_write"
                                   onChange={handleChange}
                                   checked={formData.holiday_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="holiday_create"
                                    onChange={handleChange}
                                    checked={formData.holiday_create}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="holiday_delete"
                                    onChange={handleChange}
                                    checked={formData.holiday_delete}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="holiday_import"
                                     onChange={handleChange}
                                     checked={formData.holiday_import}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="holiday_export"
                                     onChange={handleChange}
                                     checked={formData.holiday_export}
@@ -629,39 +670,39 @@ const Users = () => {
                               <tr>
                                 <td>Leaves</td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  
+                                  <Input  type="checkbox"  
                                   name="leave_read"
                                   onChange={handleChange}
                                   checked={formData.leave_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  name="leave_write"
+                                  <Input  type="checkbox"  name="leave_write"
                                   onChange={handleChange}
                                   checked={formData.leave_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="leave_create"
                                    onChange={handleChange}
                                    checked={formData.leave_create}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="leave_delete"
                                    onChange={handleChange}
                                    checked={formData.leave_delete}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="leave_import"
                                     onChange={handleChange}
                                     checked={formData.leave_import}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="leave_export"
                                     onChange={handleChange}
                                     checked={formData.leave_export}
@@ -671,39 +712,39 @@ const Users = () => {
                               <tr>
                                 <td>Events</td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  
+                                  <Input  type="checkbox"  
                                   name="event_read"
                                   onChange={handleChange}
                                   checked={formData.event_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  name="event_write"
+                                  <Input  type="checkbox"  name="event_write"
                                   onChange={handleChange}
                                   checked={formData.event_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="event_create"
                                    onChange={handleChange}
                                    checked={formData.event_create}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="event_delete"
                                    onChange={handleChange}
                                    checked={formData.event_delete}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="event_import"
                                     onChange={handleChange}
                                     checked={formData.event_import}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="event_export"
                                     onChange={handleChange}
                                     checked={formData.event_export}

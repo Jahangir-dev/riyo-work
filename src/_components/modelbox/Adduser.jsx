@@ -4,7 +4,7 @@ import jwt from "../../auth/useJwt";
 import SimpleReactValidator from "simple-react-validator";
 import Select from 'react-select';
 import $ from "jquery";
-
+import { Input  } from 'reactstrap';
 
   const Adduser = ({sendDataToParent}) => {
   
@@ -28,7 +28,7 @@ import $ from "jquery";
       email:"",
       phone:"",
       role:"",
-      company_id:"",
+      company_id:null,
       emp_read : false,
       emp_write:false,
       emp_create: false,
@@ -78,12 +78,24 @@ import $ from "jquery";
       });
     },[]);
     const handleChange = (e) => {
-      updateFormData({
+      if(e.target.type === "checkbox")
+      {
+        console.log(e.target.checked)
+        updateFormData({
           ...formData,
-            
+          
+          // Trimming any whitespace
+          [e.target.name]: e.target.checked
+        });
+  
+      } else {
+        updateFormData({
+          ...formData,
+  
           // Trimming any whitespace
           [e.target.name]: e.target.value.trim()
         });
+      }
     };
 
     function handleSelectChange(event) {
@@ -92,7 +104,6 @@ import $ from "jquery";
     }
 
     const handleSubmit = (e) => {
-      
       const formValid = simpleValidator.current.allValid();
       console.log(formValid)
       if (!formValid) {
@@ -117,8 +128,7 @@ import $ from "jquery";
             }
             console.log(res.success)
             if(res.success === true) {
-              $("#add_user").modal("hide");
-              $(".modal-backdrop").hide();
+              document.getElementById("close_user").click();
               sendDataToParent("User added successfully")
             }
         }).catch((err) =>{ console.log(err);
@@ -138,7 +148,7 @@ import $ from "jquery";
                   <div className="modal-content">
                     <div className="modal-header">
                       <h5 className="modal-title">Add User</h5>
-                      <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
+                      <button type="button" className="close" id="close_user" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>
                     </div>
@@ -148,7 +158,8 @@ import $ from "jquery";
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>First Name <span className="text-danger">*</span></label>
-                              <input className="form-control" type="text" 
+                              <input className="form-control" type="text"
+                              required 
                               name="first_name"
                               onChange={handleChange}
                               value={formData.first_name}
@@ -162,7 +173,7 @@ import $ from "jquery";
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
-                              <label>Last Name</label>
+                              <label>Last Name <span className="text-danger">*</span></label>
                               <input className="form-control" type="text" 
                               name="last_name"
                               onChange={handleChange}
@@ -179,6 +190,7 @@ import $ from "jquery";
                             <div className="form-group">
                               <label>Username <span className="text-danger">*</span></label>
                               <input className="form-control" type="text" 
+                              
                                name="user_name"
                                onChange={handleChange}
                                value={formData.user_name}
@@ -193,7 +205,7 @@ import $ from "jquery";
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
-                              <label>Email <span className="text-danger">*</span></label>
+                              <label>Email  <span className="text-danger">*</span></label>
                               <input className="form-control" type="email" 
                               name="email"
                               onChange={handleChange}
@@ -209,7 +221,7 @@ import $ from "jquery";
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
-                              <label>Password<span className="text-danger">*</span></label>
+                              <label>Password <span className="text-danger">*</span></label>
                               <input className="form-control" type="password"  
                               name="password"
                               onChange={handleChange}
@@ -305,39 +317,39 @@ import $ from "jquery";
                               <tr>
                                 <td>Employee</td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  
+                                  <Input  type="checkbox"  
                                   name="emp_read"
                                   onChange={handleChange}
                                   checked={formData.emp_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  name="emp_write"
+                                  <Input  type="checkbox"  name="emp_write"
                                   onChange={handleChange}
                                   checked={formData.emp_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="emp_create"
                                    onChange={handleChange}
                                    checked={formData.emp_create}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="emp_delete"
                                    onChange={handleChange}
                                    checked={formData.emp_delete}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="emp_import"
                                     onChange={handleChange}
                                     checked={formData.emp_import}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="emp_export"
                                     onChange={handleChange}
                                     checked={formData.emp_export}
@@ -347,39 +359,39 @@ import $ from "jquery";
                               <tr>
                                 <td>Holidays</td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  
+                                  <Input  type="checkbox"  
                                   name="holiday_read"
                                   onChange={handleChange}
                                   checked={formData.holiday_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  name="holiday_write"
+                                  <Input  type="checkbox"  name="holiday_write"
                                   onChange={handleChange}
                                   checked={formData.holiday_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="holiday_create"
                                    onChange={handleChange}
                                    checked={formData.holiday_create}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="holiday_delete"
                                    onChange={handleChange}
                                    checked={formData.holiday_delete}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="holiday_import"
                                     onChange={handleChange}
                                     checked={formData.holiday_import}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="holiday_export"
                                     onChange={handleChange}
                                     checked={formData.holiday_export}
@@ -389,39 +401,39 @@ import $ from "jquery";
                               <tr>
                                 <td>Leaves</td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  
+                                  <Input  type="checkbox"  
                                   name="leave_read"
                                   onChange={handleChange}
                                   checked={formData.leave_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  name="leave_write"
+                                  <Input  type="checkbox"  name="leave_write"
                                   onChange={handleChange}
                                   checked={formData.leave_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="leave_create"
                                    onChange={handleChange}
                                    checked={formData.leave_create}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="leave_delete"
                                    onChange={handleChange}
                                    checked={formData.leave_delete}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="leave_import"
                                     onChange={handleChange}
                                     checked={formData.leave_import}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="leave_export"
                                     onChange={handleChange}
                                     checked={formData.leave_export}
@@ -431,39 +443,39 @@ import $ from "jquery";
                               <tr>
                                 <td>Events</td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  
+                                  <Input  type="checkbox"  
                                   name="event_read"
                                   onChange={handleChange}
                                   checked={formData.event_read} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox"  name="event_write"
+                                  <Input  type="checkbox"  name="event_write"
                                   onChange={handleChange}
                                   checked={formData.event_write} />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="event_create"
                                    onChange={handleChange}
                                    checked={formData.event_create}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                    name="event_delete"
                                    onChange={handleChange}
                                    checked={formData.event_delete}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="event_import"
                                     onChange={handleChange}
                                     checked={formData.event_import}
                                   />
                                 </td>
                                 <td className="text-center">
-                                  <input  type="checkbox" 
+                                  <Input  type="checkbox" 
                                     name="event_export"
                                     onChange={handleChange}
                                     checked={formData.event_export}
