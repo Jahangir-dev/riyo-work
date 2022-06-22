@@ -6,13 +6,14 @@ import Select from 'react-select';
 import $ from "jquery";
 
 
-  const Adduser = () => {
+  const Adduser = ({sendDataToParent}) => {
+  
     const simpleValidator = useRef(new SimpleReactValidator());
     const [userRoles, setUserRoles] = useState([{label:'Admin',value:'admin'},{label:'Employee',value:'employee'},{label:'Client',value:'client'}])
-    const [userCompanies, setUserCompanies] = useState([{label:'Global Technologies',value:'1'},{label:'Delta Infotech',value:'2'}])
+    const [userCompanies, setUserCompanies] = useState([{label:'Global Technologies',value:1},{label:'Delta Infotech',value:2}])
     const [, forceUpdate] = useState();
     const [selectedUserRole, setSelectedUserRole] = useState('admin');
-    const [selectedUserCompany, setSelectedUserCompany] = useState('1');
+    const [selectedUserCompany, setSelectedUserCompany] = useState(1);
     const [UserNameError, setUserNameError] = useState();
     const [UserEmailError, setUserEmailError] = useState();
     const form = React.createRef();
@@ -102,19 +103,23 @@ import $ from "jquery";
         formData.company_id = selectedUserCompany
           
         jwt.post('/addUser',formData).then((res) => {
-          if(res.errors.email) {
-            setUserEmailError(res.errors.email);
-          } else {
-            setUserEmailError('')
-          }
-          if(res.errors.user_name) {
-            setUserNameError(res.errors.user_name);
-          } else {
-            setUserNameError('')
-          }
-            if(res.success === "true") {
+          if(res.errors) {
+              if(res.errors.email) {
+                setUserEmailError(res.errors.email);
+              } else {
+                setUserEmailError('')
+              }
+              if(res.errors.user_name) {
+                setUserNameError(res.errors.user_name);
+              } else {
+                setUserNameError('')
+              }
+            }
+            console.log(res.success)
+            if(res.success === true) {
               $("#add_user").modal("hide");
               $(".modal-backdrop").hide();
+              sendDataToParent("User added successfully")
             }
         }).catch((err) =>{ console.log(err);
           console.log(err.errors)
@@ -123,7 +128,8 @@ import $ from "jquery";
         console.log(formData);
       }
     };
- 
+    
+
     return ( 
   <>
             {/* Add User Modal */}

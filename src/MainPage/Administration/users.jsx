@@ -18,7 +18,8 @@ import "../antdstyle.css"
 import  Adduser from "../../_components/modelbox/Adduser"
 import SimpleReactValidator from "simple-react-validator";
 import Select from 'react-select';
-import { Spinner } from 'reactstrap';
+import { Spinner, Alert  } from 'reactstrap';
+import { faLaptopHouse, faLessThanEqual } from '@fortawesome/free-solid-svg-icons';
 
 const Users = () => {
   const [edit,  SetEdit] = useState();
@@ -37,12 +38,16 @@ const Users = () => {
     // {id:11,name:"Tarah Shropshire",image:Avatar_11,email:"tarahshropshire@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
     // {id:12,name:"Wilmer Deluna",image:Avatar_12,email:"wilmerdeluna@example.com",company:"Dreamguy's Technologies",created_date:"14 Jan 2019",role:"Employee"},
   ]);
-  const [roles, setRoles] = useState([{label:'Admin',value:'admin'},{label:'Employee',value:'employee'}])
-  const [companies, setCompanies] = useState([{label:'Global Technologies',value:'1'},{label:'Delta Infotech',value:'2'}])
+  const [userRoles, setUserRoles] = useState([{label:'Admin',value:'admin'},{label:'Employee',value:'employee'},{label:'Client',value:'client'}])
+  const [userCompanies, setUserCompanies] = useState([{label:'Global Technologies',value:'1'},{label:'Delta Infotech',value:'2'}])
   const simpleValidator = useRef(new SimpleReactValidator());
   const [IsLoading, setIsLoading] = useState(true);
   const [SearchText, setSearchText] = useState();
   const [, forceUpdate] = useState();
+  const [UserSuccess, setUserSuccess] = useState();
+  const [message , setMessage] = useState(false);
+  const [selectedUserRole, setSelectedUserRole] = useState('admin');
+  const [selectedUserCompany, setSelectedUserCompany] = useState('1');
   const [selectedRole, setSelectedRole] = useState('admin');
   const [searchRole, setSearchRole] = useState('admin');
   const [selectedCompany, setSelectedCompany] = useState('1');
@@ -55,6 +60,7 @@ const Users = () => {
 
 });
   const [formData, updateFormData] = useState({
+    id:null,
     first_name: "",
     last_name:"",
     password:"",
@@ -64,33 +70,33 @@ const Users = () => {
     email:"",
     phone_number:"",
     role:"",
-    employee_read : "",
-    employee_write:"",
-    employee_create: "",
-    employee_delete:"",
-    employee_import:"",
-    employee_export:"",
+    employee_read : null,
+    employee_write:null,
+    employee_create: null,
+    employee_delete:null,
+    employee_import:null,
+    employee_export:null,
 
-    holiday_read : "",
-    holiday_write:"",
-    holiday_create: "",
-    holiday_delete:"",
-    holiday_import:"",
-    holiday_export:"",
+    holiday_read : null,
+    holiday_write:null,
+    holiday_create: null,
+    holiday_delete:null,
+    holiday_import:null,
+    holiday_export:null,
 
-    leave_read : "",
-    leave_write:"",
-    leave_create: "",
-    leave_delete:"",
-    leave_import:"",
-    leave_export:"",
+    leave_read : null,
+    leave_write:null,
+    leave_create: null,
+    leave_delete:null,
+    leave_import:null,
+    leave_export:null,
 
-    event_read : "",
-    event_write:"",
-    event_create: "",
-    event_delete:"",
-    event_import:"",
-    event_export:""
+    event_read : null,
+    event_write:null,
+    event_create: null,
+    event_delete:null,
+    event_import:null,
+    event_export:null
   });
 
   const [formDataValidation, updateFormDataValidation] = useState({
@@ -116,16 +122,48 @@ const Users = () => {
 
   useEffect( ()=>{
     getUsers()
-    // if($('.select').length > 0) {
-    //   $('.select').select2({
-    //     minimumResultsForSearch: -1,
-    //     width: '100%'
-    //   });
-    // }
   },[]);  
 
-  function handleSelectChange(event) {
-    setSelectedClient(event.target.value);
+  const editForm = (e) => {
+    console.log(e)
+    setSelectedUserRole(e.role)
+    setSelectedCompany(e.user_profile.company_id)
+    updateFormData({
+      ...formData,
+      ['id'] : e.id,
+      ['first_name']: e.first_name,
+      ['last_name']: e.last_name,
+      ['role'] : e.role,
+      ['email'] : e.email,
+      ['user_name'] : e.username,
+      ['phone_number'] : e.user_profile.phone,
+      ['employee_id'] : e.user_profile.employee_id,
+      ['employee_create']: e.permissions.emp_create,
+      ['employee_delete']: e.permissions.emp_delete,
+      ['employee_export']: e.permissions.emp_export,
+      ['employee_import']: e.permissions.emp_import,
+      ['employee_read: ']:e.permissions.emp_read,
+      ['employee_write:'] :e.permissions.emp_write,
+      ['event_create']: e.permissions.event_create,
+      ['event_delete']: e.permissions.event_delete,
+      ['event_export']: e.permissions.event_export,
+      ['event_import']: e.permissions.event_import,
+      ['event_read']: e.permissions.event_read,
+      ['event_write']: e.permissions.event_write,
+      ['holiday_create']: e.permissions.holiday_create,
+      ['holiday_delete']: e.permissions.holiday_delete,
+      ['holiday_export']: e.permissions.holiday_export,
+      ['holiday_import']: e.permissions.holiday_import,
+      ['holiday_read']:   e.permissions.holiday_read,
+      ['holiday_write']: e.permissions.holiday_wite,
+      ['leave_create']: e.permissions.leave_create,
+      ['leave_delete']: e.permissions.leave_delete,
+      ['leave_export']: e.permissions.leave_export,
+      ['leave_import']: e.permissions.leave_import,
+      ['leave_read']: e.permissions.leave_read,
+      ['leave_write']: e.permissions.leave_write
+
+    });
   }
 
   const handleSubmit = (e) => {
@@ -182,6 +220,12 @@ const Users = () => {
         setIsLoading(false)
       });
   }
+
+  const sendDataToParent = (index) => { // the callback. Use a better name
+    setUserSuccess(index);
+    setMessage(true)
+  };
+
     const columns = [
       
       {
@@ -228,7 +272,7 @@ const Users = () => {
             <div className="dropdown dropdown-action text-end">
               <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
               <div className="dropdown-menu dropdown-menu-right">
-                <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_user" onClick={() => SetEdit(record)}><i className="fa fa-pencil m-r-5" /> Edit</a>
+                <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_user" onClick={() => editForm(record)}><i className="fa fa-pencil m-r-5" /> Edit</a>
                 <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_user" onClick={() => SetDelete(record)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
               </div>
             </div>
@@ -266,6 +310,12 @@ const Users = () => {
                       <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_user"><i className="fa fa-plus" /> Add User</a>
                     </div>
                   </div>
+                  
+                </div>
+                <div className="row filter-row">
+                  <div className="col-sm-6 col-md-12"> 
+                  <Alert color="success" isOpen={message} fade={true}>{UserSuccess}</Alert>
+                  </div>
                 </div>
                 {/* /Page Header */}
                 {/* Search Filter */}
@@ -278,7 +328,7 @@ const Users = () => {
                   <div className="col-sm-6 col-md-3"> 
                     <div className="form-group">
                     
-                    <Select name="states" id="select-1" className="select" onChange={(e) => setSelectedCompany(e.value)} options={companies} value={companies.filter(function(option) {
+                    <Select name="states" id="select-1" className="select" onChange={(e) => setSelectedCompany(e.value)} options={userCompanies} value={userCompanies.filter(function(option) {
                           return option.value === selectedCompany;
                       })}>
                     </Select>
@@ -287,7 +337,7 @@ const Users = () => {
                   </div>
                   <div className="col-sm-6 col-md-3"> 
                     <div className="form-group">
-                    <Select name="searchRole" className="select"  onChange={(e) => setSelectedRole(e.value)}  options={roles}  value={roles.filter(function(option) {
+                    <Select name="searchRole" className="select"  onChange={(e) => setSelectedRole(e.value)}  options={userRoles}  value={userRoles.filter(function(option) {
                             return option.value === searchRole;
                     })}>
                       
@@ -321,7 +371,7 @@ const Users = () => {
               {/* /Page Content */}
               {/* Add User Modal */}
 
-              < Adduser/>
+              < Adduser sendDataToParent={sendDataToParent}/>
 
               {/* /Add User Modal */}
               {/* Edit User Modal */}
@@ -444,21 +494,21 @@ const Users = () => {
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Role</label>
-                              <select className="select" value={selectedRole} onChange={handleSelectChange}
-                              >
-                                <option value='admin'>Admin</option>
-                                <option value='client'>Client</option>
-                                <option value='employee'>Employee</option>
-                              </select>
+                              <Select name="states" id="select-1" className="select" onChange={(e) => setSelectedUserRole(e.value)} options={userRoles} value={userRoles.filter(function(option) {
+                                  return option.value === selectedUserRole;
+                                })}>
+                      
+                              </Select>
                             </div>
                           </div>
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label>Company</label>
-                              <select className="select">
-                                <option>Global Technologies</option>
-                                <option>Delta Infotech</option>
-                              </select>
+                              <Select name="states" id="select-1" className="select" onChange={(e) => setSelectedUserCompany(e.value)} options={userCompanies} value={userCompanies.filter(function(option) {
+                                  return option.value === selectedUserCompany;
+                                })}>
+                      
+                              </Select>
                             </div>
                           </div>
                           <div className="col-sm-6">  
@@ -466,6 +516,7 @@ const Users = () => {
                               <label>Employee ID <span className="text-danger">*</span></label>
                               <input type="text" className="form-control floating" 
                                name="employee_id"
+                               disabled
                                onChange={handleChange}
                                value={formData.employee_id}
                                onBlur={() => {
