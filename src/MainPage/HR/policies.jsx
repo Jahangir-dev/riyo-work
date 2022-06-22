@@ -66,6 +66,7 @@ const Policies = () => {
     // }
   },[]);  
   const getPolicies = (e) => {
+    setIsLoading(true);
     jwt
    .get('/policies')
    .then((res) => {
@@ -81,24 +82,7 @@ const Policies = () => {
   }
   const download = (e) => {
     console.log("clicked")
-    jwt.get('/download', {
-      headers: {
-        responseType :"blob"
-      }
-    }).then((res) => {
-      console.log(res);
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        console.log(url);
-        link.setAttribute('download', 'file.pdf'); //or any other extension
-        document.body.appendChild(link);
-        link.click();
-    }).catch((err) =>{ console.log(err);
-      console.log(err.errors)
-    
-    });
-
+    //window.location.href = e
   }
 
   const handleDelete = (e) => {
@@ -146,8 +130,7 @@ const Policies = () => {
         }
       }).then((res) => {
           if(res.success == true) {
-            $("#add_policy").modal("hide");
-            $(".modal-backdrop").hide();
+            document.getElementById("close_add").click();
             getPolicies()
           }
       }).catch((err) =>{ console.log(err);
@@ -174,8 +157,7 @@ const Policies = () => {
         }
       }).then((res) => {
           if(res.success == true) {
-            $("#edit_policy").modal("hide");
-            $(".modal-backdrop").hide();
+            document.getElementById("close_edit").click();
             getPolicies()
           }
       }).catch((err) =>{ console.log(err);
@@ -221,7 +203,7 @@ const Policies = () => {
             <div className="dropdown dropdown-action text-end">
                <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                 <div className="dropdown-menu dropdown-menu-right">
-                  <a className="dropdown-item" onClick={download}><i className="fa fa-download m-r-5" /> Download</a>
+                  <a className="dropdown-item" href={record.file_name} download="your_cv.pdf"><i className="fa fa-download m-r-5" /> Download</a>
                   <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_policy" onClick={() => editForm(record)}><i className="fa fa-pencil m-r-5" /> Edit</a>
                   <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_policy" onClick={() => SetDelete(record)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
                 </div>
@@ -231,6 +213,12 @@ const Policies = () => {
     ]
       return ( 
       <div className="page-wrapper">
+            {
+              IsLoading &&
+              <div className="loader">
+              <Spinner color="white" />
+              </div>
+            }
         <Helmet>
             <title>Policies - Riyo Admin Template</title>
             <meta name="description" content="Login page"/>					
@@ -278,7 +266,7 @@ const Policies = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Add Policy</h5>
-                <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" className="close" id="close_add" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">×</span>
                 </button>
               </div>
@@ -336,7 +324,7 @@ const Policies = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Edit Policy</h5>
-                <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" className="close" id="close_edit" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">×</span>
                 </button>
               </div>

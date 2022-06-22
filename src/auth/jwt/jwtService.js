@@ -16,7 +16,7 @@ export default class JwtService {
   constructor(jwtOverrideConfig) {
     this.jwtConfig = { ...this.jwtConfig, ...jwtOverrideConfig };
     
-    axios.defaults.baseURL = "http://127.0.0.1:8000/api";
+    axios.defaults.baseURL = "http://dev-api.riyowork.com/api";
 
     // ** Request Interceptor
     axios.interceptors.request.use(
