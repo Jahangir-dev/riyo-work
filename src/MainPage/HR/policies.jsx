@@ -11,7 +11,7 @@ import jwt from "../../auth/useJwt";
 import $ from "jquery";
 import SimpleReactValidator from "simple-react-validator";
 import Select from 'react-select';
-import { Spinner } from 'reactstrap';
+import { Spinner, Input } from 'reactstrap';
 
 const Policies = () => {
   const [data, setData] = useState([]);
@@ -19,6 +19,7 @@ const Policies = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('4');
   const simpleValidator = useRef(new SimpleReactValidator());
   const [, forceUpdate] = useState();
+  const [delete_record,  SetDelete] = useState();
   const form = React.createRef();
   const initialFormData = Object.freeze({});
   const [departments, setDepartments] = useState([{label:'All Departments',value:'4'},{label:'Web Development',value:'1'},{label:'Marketing',value:'2'},{label:'IT Managment',value:'3'}])
@@ -85,9 +86,11 @@ const Policies = () => {
         responseType :"blob"
       }
     }).then((res) => {
+      console.log(res);
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement('a');
         link.href = url;
+        console.log(url);
         link.setAttribute('download', 'file.pdf'); //or any other extension
         document.body.appendChild(link);
         link.click();
@@ -95,19 +98,38 @@ const Policies = () => {
       console.log(err.errors)
     
     });
-    // axios({
-    //   url: 'http://127.0.0.1:8000/api/download',
-    //   method: 'GET',
-    //   responseType: 'blob', // important
-    // }).then((response) => {
-    //    const url = window.URL.createObjectURL(new Blob([response.data]));
-    //    const link = document.createElement('a');
-    //    link.href = url;
-    //    link.setAttribute('download', 'file.pdf'); //or any other extension
-    //    document.body.appendChild(link);
-    //    link.click();
-    // });
+
   }
+
+  const handleDelete = (e) => {
+   
+    jwt.get('/deletePolicy/'+delete_record.id).then((res) => {
+      if(res.success == true) {
+        getPolicies();
+        $("#delete_policy").modal("hide");
+        $(".modal-backdrop").hide();
+        
+      }
+    }).catch((err) =>{ console.log(err);
+        
+    });
+   
+  };
+
+  const editForm = (e) => {
+    console.log(e.department_id)
+    setSelectedDepartment(e.department_id)
+
+    updateFormData({
+      ...formData,
+      ['id'] : e.id,
+      ['name']: e.name,
+      ['description']: e.description,
+      ['departmrnt_id'] : e.departmrnt_id,
+      ['document'] : e.document,
+    });
+  }
+
   const handleSubmit = (e) => {
       
     const formValid = simpleValidator.current.allValid();
@@ -135,6 +157,37 @@ const Policies = () => {
       console.log(formData);
     }
   };
+
+  const handleEdit = (e) => {
+      
+    const formValid = simpleValidator.current.allValid();
+    console.log(formValid)
+    if (!formValid) {
+      simpleValidator.current.showMessages(true);
+      forceUpdate(1)
+    } else {
+      formData.department_id = selectedDepartment
+        
+      jwt.post('/updatePolicy/'+formData.id,formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((res) => {
+          if(res.success == true) {
+            $("#edit_policy").modal("hide");
+            $(".modal-backdrop").hide();
+            getPolicies()
+          }
+      }).catch((err) =>{ console.log(err);
+        console.log(err.errors)
+      
+      });
+      console.log(formData);
+    }
+  };
+
+
+
     const columns = [
       
       {
@@ -169,8 +222,8 @@ const Policies = () => {
                <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                 <div className="dropdown-menu dropdown-menu-right">
                   <a className="dropdown-item" onClick={download}><i className="fa fa-download m-r-5" /> Download</a>
-                  <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_policy"><i className="fa fa-pencil m-r-5" /> Edit</a>
-                  <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_policy"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                  <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_policy" onClick={() => editForm(record)}><i className="fa fa-pencil m-r-5" /> Edit</a>
+                  <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_policy" onClick={() => SetDelete(record)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
                 </div>
             </div>
           ),
@@ -244,7 +297,7 @@ const Policies = () => {
                   
                   <div className="form-group">
                     <label>Description <span className="text-danger">*</span></label>
-                    <textarea className="form-control" rows={4} defaultValue={""} name="description" onChange={handleChange}
+                    <Input type="textarea" className="form-control" rows={4} name="description" onChange={handleChange}
                               value={formData.description}
                               onBlur={() => {
                                 simpleValidator.current.showMessageFor("description")
@@ -291,30 +344,38 @@ const Policies = () => {
                 <form>
                   <div className="form-group">
                     <label>Policy Name <span className="text-danger">*</span></label>
-                    <input className="form-control" type="text" defaultValue="Leave Policy" />
+                    <input className="form-control" type="text" name ="name"  value={formData.name} onChange={handleChange}
+                     onBlur={() => {
+                      simpleValidator.current.showMessageFor("name")
+                      forceUpdate(1);
+                    }}/>
+                    {simpleValidator.current.message("name", formData.name, "required")}
                   </div>
                   <div className="form-group">
                     <label>Description <span className="text-danger">*</span></label>
-                    <textarea className="form-control" rows={4} defaultValue={""} />
+                    <Input type="textarea" defaultValue= {formData.description} className="form-control" rows={4} name="descrption" onChange={handleChange}
+                     onBlur={() => {
+                      simpleValidator.current.showMessageFor("descrption")
+                      forceUpdate(1);
+                    }}/>
+                    {simpleValidator.current.message("descrption", formData.name, "required")}
                   </div>
                   <div className="form-group">
                     <label className="col-form-label">Department</label>
-                    <select className="select">
-                      <option>All Departments</option>
-                      <option>Web Development</option>
-                      <option>Marketing</option>
-                      <option>IT Management</option>
-                    </select>
+                    <Select name="department_id" id="select-1" className="select" onChange={(e) => setSelectedDepartment(e.value)} options={departments} value={departments.filter(function(option) {
+                                  return option.value == selectedDepartment;
+                                })}>
+                    </Select>
                   </div>
                   <div className="form-group">
                     <label>Upload Policy <span className="text-danger">*</span></label>
                     <div className="custom-file">
-                      <input type="file" className="custom-file-input" id="edit_policy_upload" />
-                      <label className="custom-file-label" htmlFor="edit_policy_upload">Choose file</label>
+                      <input type="file" className="custom-file-input" id="edit_policy_upload" name="document" onChange={handleChange}/>
+                      {/* <label className="custom-file-label" htmlFor="edit_policy_upload">Choose file</label> */}
                     </div>
                   </div>
                   <div className="submit-section">
-                    <button className="btn btn-primary submit-btn">Save</button>
+                    <button type="button" onClick={handleEdit} className="btn btn-primary submit-btn">Save</button>
                   </div>
                 </form>
               </div>
@@ -334,7 +395,7 @@ const Policies = () => {
                 <div className="modal-btn delete-action">
                   <div className="row">
                     <div className="col-6">
-                      <a href="" className="btn btn-primary continue-btn">Delete</a>
+                      <a onClick={handleDelete} className="btn btn-primary continue-btn">Delete</a>
                     </div>
                     <div className="col-6">
                       <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
